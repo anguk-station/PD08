@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PLAYDAY 08 · 단풍 명소 가이드 — 나만의 가을 단풍 명소를 추천해주세요</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Michroma&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#FBF7F0;
+    --maple:#A63D2A;
+    --maple-deep:#7E2B1C;
+    --maple-soft:#8C6A52;
+    --card:#FFFDF8;
+    --amber:#E0A040;
+    --ink:#2B2522;
+    --line:#EADFCB;
+    --card-line:#DACBB0;
+    --glass:rgba(255,255,255,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Pretendard',-apple-system,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.7;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
+
+  /* ───────── 히어로: 배경 사진 + HTML 텍스트 ───────── */
+  .hero{
+    position:relative;max-width:900px;margin:0 auto;
+    min-height:640px;overflow:hidden;
+    background:#5a2a1a url("image/bg.jpg") center/cover no-repeat;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:56px 24px 60px;text-align:center;color:#fff;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom, rgba(40,15,8,.42) 0%, rgba(40,15,8,.08) 38%, rgba(40,15,8,.18) 100%);
+  }
+  .hero > *{position:relative;z-index:1;}
+  .hero .brand{
+    font-family:'Michroma',sans-serif;font-size:66px;letter-spacing:.06em;
+    line-height:1;color:#FFF8EC;
+    text-shadow:0 4px 22px rgba(0,0,0,.45);
+    margin-top:14px;
+  }
+  .hero .sub{
+    margin-top:26px;font-size:21px;font-weight:600;letter-spacing:-.02em;
+    color:#FFF4E3;text-shadow:0 2px 12px rgba(0,0,0,.5);
+  }
+  .hero .intro{
+    margin-top:auto;width:100%;max-width:800px;
+    background:rgba(255,250,240,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.85);border-radius:20px;
+    padding:38px 34px 36px;color:var(--ink);
+    box-shadow:0 18px 44px rgba(50,20,10,.28);
+    font-size:19px;line-height:2.05;letter-spacing:-.02em;
+  }
+  .hero .intro p{margin:0;}
+  .hero .intro b{color:var(--maple-deep);}
+  .hero .intro .em{
+    background:linear-gradient(transparent 55%, rgba(224,160,64,.45) 55%);padding:0 2px;font-weight:700;
+  }
+  @media(max-width:600px){
+    .hero{min-height:620px;padding:40px 18px 40px;}
+    .hero .brand{font-size:40px;}
+    .hero .sub{font-size:16.5px;margin-top:18px;}
+    .hero .intro{padding:26px 20px;font-size:16px;line-height:1.9;margin-top:34px;}
+  }
+
+  /* ───────── 소개 밴드: 제목 + 3단계 카드 ───────── */
+  .overview{text-align:center;padding:64px 0 10px;}
+  .overview .hanja{
+    font-family:'Gowun Batang',serif;font-size:15px;letter-spacing:.5em;color:var(--maple-soft);
+  }
+  .overview h1{
+    font-family:'Gowun Batang',serif;font-size:44px;color:var(--maple-deep);
+    letter-spacing:.08em;margin-top:6px;line-height:1.3;
+  }
+  .overview h2{
+    font-family:'Gowun Batang',serif;font-size:27px;font-weight:400;color:var(--maple-soft);
+    margin-top:4px;letter-spacing:.02em;
+  }
+  .overview hr{border:none;border-top:1px solid var(--card-line);margin:36px auto 0;max-width:860px;}
+  @media(max-width:600px){
+    .overview{padding-top:48px;}
+    .overview h1{font-size:32px;}
+    .overview h2{font-size:20px;}
+  }
+
+  /* ───────── STEP 플로우 ───────── */
+  .section{padding:40px 0 56px;}
+  .flow{position:relative;}
+  .step-block{
+    position:relative;margin:0 0 44px 26px;
+    background:var(--glass);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.8);border-radius:18px;
+    box-shadow:0 8px 24px rgba(126,43,28,.07);
+    padding:0 32px 32px 40px;
+  }
+  .step-block:last-child{margin-bottom:8px;}
+  .step-block:not(:last-child)::after{
+    content:"";position:absolute;left:-1px;top:100%;height:70px;
+    border-left:2px dashed var(--card-line);
+  }
+  .step-num{
+    position:absolute;left:-22px;top:24px;width:44px;height:44px;border-radius:50%;
+    background:var(--maple);color:#fff;display:grid;place-items:center;
+    font-family:'Gowun Batang',serif;font-weight:700;font-size:19px;
+    box-shadow:0 6px 14px rgba(166,61,42,.3);z-index:2;
+  }
+  .step-head{
+    margin:0 -32px 28px -40px;padding:24px 32px 22px 40px;
+    background:rgba(166,61,42,.055);
+    border-bottom:1px solid rgba(166,61,42,.10);
+    border-radius:18px 18px 0 0;
+  }
+  .step-head strong{
+    display:block;font-family:'Gowun Batang',serif;font-size:24px;color:var(--ink);
+    line-height:1.4;padding-top:2px;
+  }
+  .step-head p{font-size:16px;color:var(--maple-soft);margin-top:6px;max-width:760px;letter-spacing:-0.04em;}
+  @media(max-width:600px){
+    .step-block{margin-left:0;padding:0 18px 26px;}
+    .step-head{margin:0 -18px 22px -18px;padding:20px 18px;}
+    .step-block:not(:last-child)::after{left:26px;}
+    .step-num{position:static;margin-bottom:12px;}
+  }
+
+  /* ───────── 추천 카드 (여행 티켓 느낌) ───────── */
+  .cur-card{
+    background:var(--card);border:1.5px solid var(--card-line);border-radius:8px;
+    padding:38px 34px 32px;position:relative;
+    box-shadow:0 2px 0 var(--card-line), 0 16px 34px rgba(126,43,28,.09);
+  }
+  @media(max-width:600px){.cur-card{padding:34px 18px 26px;}}
+  .tape{
+    position:absolute;top:-12px;width:96px;height:26px;background:var(--amber);
+    opacity:.65;border-radius:2px;
+  }
+  .tape.l{left:8%;transform:rotate(-5deg);}
+  .tape.r{right:8%;transform:rotate(4deg);}
+  .cur-head{
+    text-align:center;border-bottom:2px solid var(--maple);
+    padding-bottom:14px;margin-bottom:24px;
+  }
+  .cur-head .small{font-size:11px;letter-spacing:.3em;color:var(--maple-soft);font-weight:800;}
+  .cur-head h3{font-family:'Gowun Batang',serif;font-size:25px;margin-top:4px;color:var(--maple-deep);}
+  .field{margin-bottom:26px;}
+  .field label{
+    display:block;font-size:18px;font-weight:700;color:var(--maple-soft);
+    letter-spacing:.02em;margin-bottom:10px;line-height:1.5;
+  }
+  .field label em{color:#B4482F;font-style:normal;}
+  .field label .opt{font-size:13px;font-weight:600;color:#B5A48C;margin-left:4px;}
+  .field input,.field textarea{
+    width:100%;background:transparent;border:none;border-bottom:1.5px dashed var(--card-line);
+    font-family:'Nanum Pen Script',cursive;font-size:27px;color:var(--ink);
+    padding:4px 2px;outline:none;transition:border-color .15s;
+  }
+  .field textarea{resize:vertical;min-height:48px;line-height:1.5;}
+  .field input:focus,.field textarea:focus{border-bottom-color:var(--maple);}
+  .field input::placeholder,.field textarea::placeholder{color:#CCC0A2;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+
+  /* 입력칸 + 지도검색 버튼 한 줄 */
+  .with-btn{display:flex;align-items:flex-end;gap:10px;}
+  .with-btn input{flex:1;min-width:0;}
+  .map-btn{
+    flex:none;display:inline-flex;align-items:center;gap:6px;
+    font-family:'Pretendard',sans-serif;font-size:13px;font-weight:700;
+    background:#fff;color:#03C75A;border:1.5px solid #03C75A;border-radius:999px;
+    padding:8px 14px;cursor:pointer;white-space:nowrap;line-height:1.2;
+    transition:all .15s ease;
+  }
+  .map-btn:hover{background:#03C75A;color:#fff;transform:translateY(-1px);}
+  .map-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;background:#fff;color:#03C75A;}
+  .map-btn .n{
+    display:inline-grid;place-items:center;width:16px;height:16px;border-radius:3px;
+    background:#03C75A;color:#fff;font-size:10px;font-weight:900;
+  }
+  .map-btn:hover .n{background:#fff;color:#03C75A;}
+  @media(max-width:600px){
+    .map-btn{padding:7px 10px;font-size:12px;gap:4px;}
+    .map-btn .long{display:none;}
+  }
+  .field .help{font-size:13px;color:#A8977C;margin-top:8px;line-height:1.6;}
+  .field .help a{color:#03C75A;font-weight:700;text-decoration:none;}
+  .field .help a:hover{text-decoration:underline;}
+  /* 장소 검색이 살아있으면(카카오 키 설정) 새창 버튼·안내문을 자동완성용으로 바꿈 */
+  .help .ac-on,body.has-ac .help .ac-off{display:none;}
+  body.has-ac .help .ac-on{display:inline;}
+  body.has-ac .map-btn{display:none;}
+
+  /* 장소 자동완성 드롭다운 */
+  .ac{position:relative;}
+  .ac-list{
+    display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;
+    background:#fff;border:1px solid var(--card-line);border-radius:12px;
+    box-shadow:0 14px 34px rgba(50,20,10,.16);max-height:320px;overflow-y:auto;
+    font-family:'Pretendard',sans-serif;text-align:left;
+  }
+  .ac-list.open{display:block;}
+  .ac-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid #F3ECDD;}
+  .ac-item:last-child{border-bottom:none;}
+  .ac-item:hover,.ac-item.active{background:#FFF4E3;}
+  .ac-item .nm{font-size:15px;font-weight:700;color:var(--ink);line-height:1.4;}
+  .ac-item .nm .cat{font-size:11.5px;font-weight:600;color:#B5A48C;margin-left:6px;}
+  .ac-item .ad{font-size:12.5px;color:var(--maple-soft);line-height:1.4;}
+  .ac-msg{padding:12px 14px;font-size:13px;color:#A8977C;}
+  /* 선택한 장소의 주소 + 지도 링크 */
+  .picked{display:none;font-size:13px;color:var(--maple-soft);margin-top:8px;line-height:1.6;}
+  .picked.on{display:block;}
+  .picked a{color:#03C75A;font-weight:700;text-decoration:none;margin-left:6px;white-space:nowrap;}
+  .picked a:hover{text-decoration:underline;}
+
+  /* 함께 둘러보세요 박스 */
+  .nearby{
+    border:1.5px dashed var(--card-line);border-radius:12px;padding:20px 20px 6px;
+    background:rgba(224,160,64,.05);
+  }
+  .nearby .row{display:grid;grid-template-columns:120px 1fr;gap:0 16px;align-items:end;margin-bottom:18px;}
+  .nearby .row .tag{
+    font-size:15px;font-weight:800;color:var(--maple-deep);padding-bottom:10px;white-space:nowrap;
+  }
+  @media(max-width:600px){
+    .nearby{padding:16px 14px 2px;}
+    .nearby .row{grid-template-columns:1fr;gap:4px 0;}
+    .nearby .row .tag{padding-bottom:2px;}
+  }
+
+  /* 알약형 선택 버튼 */
+  .pills{display:flex;flex-wrap:wrap;gap:8px;}
+  .pill{
+    font-family:'Pretendard',sans-serif;
+    background:var(--card);border:1.5px solid var(--card-line);border-radius:999px;
+    padding:8px 15px;font-size:13.5px;font-weight:600;color:var(--ink);
+    cursor:pointer;line-height:1.2;text-align:center;white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .pill:hover{border-color:var(--maple);transform:translateY(-1px);}
+  .pill.selected{
+    background:var(--maple);border-color:var(--maple);color:#fff;
+    box-shadow:0 4px 12px rgba(166,61,42,.25);
+  }
+  .pills.mini{gap:6px;margin-bottom:10px;}
+  .pills.mini .pill{padding:5px 11px;font-size:12.5px;}
+
+  .field.hl{margin-bottom:20px;}
+  .field.hl label{letter-spacing:-0.04em;}
+  .field.hl label .mark{
+    background:linear-gradient(transparent 40%, rgba(255,214,90,.85) 40%);
+    padding:0 3px;font-size:18px;color:var(--ink);
+  }
+  .field.hl textarea.ruled{
+    border-bottom:none;font-size:30px;
+    line-height:44px;height:88px;min-height:88px;padding:0 2px;
+    background-image:repeating-linear-gradient(
+      to bottom, transparent 0, transparent 43px, var(--card-line) 43px, var(--card-line) 44px
+    );
+    background-attachment:local;resize:none;
+  }
+  .field.hl textarea.ruled:focus{
+    background-image:repeating-linear-gradient(
+      to bottom, transparent 0, transparent 43px, var(--amber) 43px, var(--amber) 44px
+    );
+  }
+  .field.hl .count{text-align:right;font-size:13px;color:var(--maple-soft);margin-top:6px;}
+
+  /* 실시간 프롬프트 */
+  .result{margin-top:0;position:relative;}
+  .result-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px;}
+  .result-head h4{font-size:15px;}
+  .copy-btn{
+    background:var(--maple);color:#fff;border:none;border-radius:8px;
+    padding:9px 18px;font-size:13.5px;font-weight:700;cursor:pointer;
+  }
+  .copy-btn.done{background:#2E7D4F;}
+  .result textarea{
+    width:100%;height:300px;background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:16px;font-size:12.5px;line-height:1.65;
+    font-family:'Pretendard';color:var(--ink);resize:vertical;
+  }
+
+  /* Copilot 버튼 */
+  .copilot-row{margin-top:20px;text-align:center;}
+  .copilot-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    background:var(--maple);color:#fff;text-decoration:none;font-weight:700;
+    font-size:16px;padding:18px 40px;border-radius:12px;
+    box-shadow:0 6px 18px rgba(166,61,42,.3);transition:transform .15s ease;
+  }
+  .copilot-btn:hover{transform:translateY(-2px);}
+
+  /* TIP 카드 */
+  .tip-float{position:absolute;top:0;left:calc(100% + 64px);width:280px;}
+  @media(max-width:1330px){
+    .tip-float{position:static;width:auto;max-width:340px;margin:22px 0 4px auto;}
+  }
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+  .tip-card{
+    background:#FFF7E0;border:1.5px solid var(--amber);border-radius:16px;
+    padding:16px 18px 18px;font-size:13px;line-height:1.6;color:#5A4A1E;
+    box-shadow:0 8px 22px rgba(224,160,64,.18);
+    animation:floaty 3.2s ease-in-out infinite;
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .tip-card:hover{box-shadow:0 16px 34px rgba(224,160,64,.35);animation-play-state:paused;transform:translateY(-4px);}
+  .tip-card .tip-title{font-weight:800;color:#A87B22;margin-bottom:6px;font-size:14.5px;}
+  .tip-card .tip-title .em{font-size:16px;}
+  .tip-card .hl{background:linear-gradient(transparent 45%, rgba(255,214,90,.9) 45%);padding:0 2px;font-weight:700;}
+  .tip-card b{color:#7A5A12;}
+  .tip-card .tip-shot{margin-top:12px;}
+  .tip-card .tip-shot img{
+    display:block;width:100%;height:auto;border-radius:10px;
+    border:1px solid #E7D9B0;box-shadow:0 4px 12px rgba(0,0,0,.10);background:#fff;
+  }
+
+  /* 마무리 */
+  .finish{text-align:center;padding-top:4px;}
+  .gallery-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    background:var(--maple);color:#fff;text-decoration:none;font-weight:700;
+    font-size:16px;padding:18px 40px;border-radius:12px;
+    box-shadow:0 6px 18px rgba(166,61,42,.3);transition:transform .15s ease;
+  }
+  .gallery-btn:hover{transform:translateY(-2px);}
+  .finish-note{color:var(--maple-soft);font-size:14px;margin-top:20px;line-height:1.7;}
+  .finish-note b{color:var(--maple-deep);}
+  .finish .deadline{
+    display:table;margin:14px auto 0;color:var(--maple);font-size:13px;font-weight:700;
+    border:1px solid var(--card-line);border-radius:999px;padding:6px 16px;background:var(--card);
+  }
+
+  .brand-footer{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    padding:22px 20px 46px;flex-wrap:wrap;
+  }
+  .brand-footer img{height:26px;width:auto;display:block;}
+</style>
+</head>
+<body>
+
+<!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
+
+<!-- 히어로: 배경 사진 위에 HTML 텍스트 -->
+<header class="hero">
+  <div class="brand">PLAYDAY</div>
+  <div class="sub">- 나만의 가을 단풍 명소를 추천해주세요 -</div>
+  <div class="intro">
+    <p>올해 가을, 가장 눈부셨던 단풍은 어디였나요?</p>
+    <p>오늘 하루, 여러분은 동료들을 안내하는 <b>'단풍 명소 여행 가이드'</b>입니다.</p>
+    <p>마음속 <span class="em">'단풍 명소 한 곳'</span>과 <span class="em">'추천 이유 한 줄'</span>을 남겨주시면</p>
+    <p>AI가 멋진 여행 가이드 카드로 완성해 드립니다.</p>
+  </div>
+</header>
+
+<!-- 소개 밴드 -->
+<div class="wrap">
+  <div class="overview">
+    <div class="hanja">丹 楓 名 所</div>
+    <h1>단풍 명소 가이드</h1>
+    <h2>가을 여행 가이드가 되는 3단계</h2>
+    <hr />
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="flow">
+
+      <!-- STEP 1 -->
+      <div class="step-block">
+        <span class="step-num">1</span>
+        <div class="step-head">
+          <strong>🍁 내용 작성</strong>
+          <p>동료들에게 꼭 소개하고 싶은 단풍 명소 한 곳을 골라, 추천 이유와 함께 둘러볼 곳을 적어주세요.</p>
+        </div>
+        <div class="cur-card">
+          <span class="tape l" aria-hidden="true"></span>
+          <span class="tape r" aria-hidden="true"></span>
+          <div class="cur-head">
+            <div class="small">PLAYDAY · AUTUMN FOLIAGE GUIDE</div>
+            <h3>단풍 명소 추천 카드</h3>
+          </div>
+
+          <div class="field">
+            <label>장소 <em>*</em></label>
+            <div class="ac">
+              <div class="with-btn">
+                <input id="f-place" type="text" placeholder="예) 내장산 국립공원" autocomplete="off" />
+                <button type="button" class="map-btn" id="btn-map-place" disabled><span class="n">N</span> <span class="long">네이버&nbsp;</span>지도 검색</button>
+              </div>
+              <div class="ac-list" id="ac-place"></div>
+            </div>
+            <div class="help">
+              <span class="ac-on">장소명을 입력하면 아래에 후보가 펼쳐집니다. 하나를 클릭하면 주소가 자동으로 채워져요.</span>
+              <span class="ac-off">장소명을 적고 <b>지도 검색</b>을 누르면 새 창에서 위치가 열립니다. 주소를 복사해 아래에 붙여 넣어주세요.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>상세 주소 <span class="opt">(선택)</span></label>
+            <input id="f-address" type="text" placeholder="예) 전북 정읍시 내장동 산 231" />
+            <div class="picked" id="p-place"></div>
+          </div>
+
+          <div class="field hl">
+            <label><span class="mark">추천 이유 / 팁</span> <em>*</em> — 이곳의 단풍이 특별한 이유나, 꼭 알아야 할 꿀팁을 2줄로 적어주세요.</label>
+            <textarea id="f-reason" class="ruled" rows="2" maxlength="120" placeholder="예) 케이블카 타고 올려다보는 애기단풍 터널이 압권이에요. 주말 오전 9시 전에 가야 주차 가능!"></textarea>
+            <div class="count"><span id="reason-count">0</span> / 120자</div>
+          </div>
+
+          <div class="field">
+            <label>함께 둘러보세요 <span class="opt">(선택)</span></label>
+            <div class="nearby">
+              <div class="row">
+                <div class="tag">🍽️ 맛집 / 카페</div>
+                <div>
+                  <div class="ac">
+                    <div class="with-btn">
+                      <input id="f-food" type="text" placeholder="예) 내장산 산채비빔밥 ○○식당" autocomplete="off" />
+                      <button type="button" class="map-btn" id="btn-map-food" disabled><span class="n">N</span> 지도 검색</button>
+                    </div>
+                    <div class="ac-list" id="ac-food"></div>
+                  </div>
+                  <div class="picked" id="p-food"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="tag" id="near-type-label">🏞️ 관광지</div>
+                <div>
+                  <div class="pills mini" id="near-pills">
+                    <button type="button" class="pill selected" data-val="관광지" data-icon="🏞️">관광지</button>
+                    <button type="button" class="pill" data-val="포토 스팟" data-icon="📸">포토 스팟</button>
+                    <button type="button" class="pill" data-val="산책·드라이브 코스" data-icon="🚗">산책·드라이브</button>
+                    <button type="button" class="pill" data-val="전통시장" data-icon="🧺">전통시장</button>
+                    <button type="button" class="pill" data-val="숙소" data-icon="🏡">숙소</button>
+                    <button type="button" class="pill" data-val="체험·축제" data-icon="🎪">체험·축제</button>
+                  </div>
+                  <div class="ac">
+                    <div class="with-btn">
+                      <input id="f-near" type="text" placeholder="예) 내장사, 우화정" autocomplete="off" />
+                      <button type="button" class="map-btn" id="btn-map-near" disabled><span class="n">N</span> 지도 검색</button>
+                    </div>
+                    <div class="ac-list" id="ac-near"></div>
+                  </div>
+                  <div class="picked" id="p-near"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>디자인 스타일</label>
+            <div class="pills" id="style-pills">
+              <button type="button" class="pill selected" data-val="">✨ AI 추천</button>
+              <button type="button" class="pill" data-val="따뜻한 필름 그레인 질감의 감성 가을 사진 무드, 부드러운 역광과 차분한 세리프 타이포그래피">🍂 감성 필름 포토</button>
+              <button type="button" class="pill" data-val="1960년대 빈티지 여행 포스터 스타일, 평면적인 색면과 굵은 레터링, 살짝 바랜 종이 질감">🗺️ 빈티지 여행 포스터</button>
+              <button type="button" class="pill" data-val="여백을 살린 미니멀한 에디토리얼 여행 매거진 레이아웃, 세련되고 절제된 타이포그래피">📰 미니멀 매거진</button>
+              <button type="button" class="pill" data-val="부드러운 수채화 번짐으로 그린 단풍 풍경 일러스트, 따뜻하고 서정적인 분위기">🎨 수채화 일러스트</button>
+              <button type="button" class="pill" data-val="여행 다이어리에 손으로 그리고 쓴 듯한 핸드드로잉 스타일, 스티커와 마스킹테이프, 메모 느낌">✏️ 손그림 다이어리</button>
+              <button type="button" class="pill" data-val="한옥·단청·전통 문양에서 영감을 받은 한국 전통 감성 디자인, 먹과 한지 질감, 단정한 명조체">🏯 한국 전통 감성</button>
+              <button type="button" class="pill" data-val="어두운 배경에 단풍의 붉은색과 골드 포인트를 준 무드있고 고급스러운 다크 디자인">🌙 다크 무드</button>
+              <button type="button" class="pill" data-val="찢어 붙인 종이와 사진, 손글씨, 스티커가 어우러진 스크랩북 콜라주 스타일, 아날로그 핸드메이드 무드">✂️ 스크랩북 콜라주</button>
+              <button type="button" class="pill" data-val="__custom__">✏️ 직접 입력</button>
+            </div>
+            <input id="f-style-custom" type="text" placeholder="원하는 스타일을 자유롭게 적어주세요" style="display:none;margin-top:12px;" />
+            <input id="f-style" type="hidden" value="" />
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-block">
+        <span class="step-num">2</span>
+        <div class="step-head">
+          <strong>🤖 Copilot 협업</strong>
+          <p>아래에 준비된 프롬프트를 복사하여 Copilot에 입력해 보세요. 여러분의 추천이 여행 가이드가 건네는 멋진 단풍 명소 가이드 카드로 재탄생합니다.</p>
+        </div>
+        <div class="result" id="result">
+          <div class="result-head">
+            <h4>📋 완성 프롬프트 — 전체 복사해서 Copilot에서 사용하세요</h4>
+            <button class="copy-btn" id="btn-copy">전체 복사</button>
+          </div>
+          <textarea id="result-text" readonly></textarea>
+          <div class="tip-float">
+            <div class="tip-card">
+              <div class="tip-title"><span class="em">💡</span> 모델설정 TIP</div>
+              기본 설정된 '자동' 모드 대신 <b><span class="hl">GPT-5.6 Sol 빠른 응답으로 변경</span></b>해 보세요! 훨씬 더 똑똑하고 디테일한 결과가 나옵니다.
+              <div class="tip-shot">
+                <img src="image/model.png" alt="Copilot 모델 선택에서 GPT-5.6 Sol 빠른 응답 선택" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copilot-row" style="margin-top:18px;">
+          <a class="copilot-btn" href="https://m365.cloud.microsoft/chat/" target="_blank" rel="noopener">🤖 Copilot 접속하기 →</a>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-block">
+        <span class="step-num">3</span>
+        <div class="step-head">
+          <strong>🍁 단풍 명소 가이드 소개</strong>
+          <p>완성된 가이드 카드를 PlayGallery에 올려 동료들에게 소개해주세요.</p>
+        </div>
+        <div class="finish">
+          <div class="copilot-row">
+            <a class="gallery-btn" href="https://hmap.hdec.co.kr/HMAP/Authentication/HMAPAccess.aspx?popupUrl=PLAYGALLERY" target="_blank" rel="noopener">🍁 PlayDay Gallery 이동 →</a>
+          </div>
+          <p class="finish-note">동료들에게 '좋아요 수'를 가장 많이 받은 우수작을 선정하여 <b>'네이버 포인트'</b>를 보내 드립니다.</p>
+          <div class="deadline">제출기한 : '26년 10월 31일</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="brand-footer">
+    <img src="image/brand_footer.png" alt="워크이노베이션센터 · AI디자인랩" />
+  </div>
+</div>
+
+<!-- ▲▲▲ 여기까지 ▲▲▲ -->
+<script>
+(function(){
+  var TEMPLATE = `당신은 가을 단풍 여행을 전문으로 안내하는 '여행 가이드'입니다. 동료가 추천한 단풍 명소를 정확하게 조사해 핵심 정보를 정리하고, 여행 가이드가 손님에게 직접 건네는 한 장짜리 '단풍 명소 추천 가이드' 인포그래픽 카드를 만드는 일을 합니다.
+
+이 카드에서 가장 중요한 것은 화려한 디자인도, 장소 정보도 아닌 '추천인의 추천 이유'입니다.
+추천 이유가 가장 먼저 눈에 들어오고, 나머지 모든 요소는 그 추천을 뒷받침하도록 만드세요.
+그리고 예쁘게 만드는 것보다 실제 장소의 정보를 정확하게 전달하는 것이 더 중요합니다.
+
+━━━━━━━━━━━━━━━━━━
+[추천인 입력 내용]
+━━━━━━━━━━━━━━━━━━
+■ 추천 장소: {PLACE}
+■ 상세 주소: {ADDRESS}
+■ 네이버 지도: {MAPLINK}
+■ 추천 이유 / 팁 (가장 중요): {REASON}
+■ 함께 둘러보세요
+  - 맛집/카페: {FOOD}
+  - {NEARTYPE}: {NEAR}
+■ 디자인 스타일: {STYLE}
+
+━━━━━━━━━━━━━━━━━━
+[작업 순서]
+━━━━━━━━━━━━━━━━━━
+1. 추천 장소의 정확한 명칭과 위치(시·군·구)를 확인하세요. 이름이 비슷한 다른 지역의 장소와 혼동하지 마세요.
+2. 공식 홈페이지, 한국관광공사(대한민국 구석구석), 국립공원공단, 지자체 자료 등 신뢰할 수 있는 정보를 바탕으로 단풍 절정 시기, 추천 코스와 소요 시간, 교통·주차, 입장료·운영시간을 조사하세요.
+3. 함께 둘러볼 맛집/카페와 {NEARTYPE}도 실제로 존재하는 곳인지 확인하고, 한 줄 소개와 추천 장소에서의 거리(또는 이동 시간)를 정리하세요.
+4. 확인된 내용만으로 카드에 들어갈 원고를 먼저 확정한 뒤, 그 원고 그대로 이미지를 만드세요.
+5. 생성 후 장소명·주소·추천 이유의 오탈자와 한글 깨짐을 검수하고, 문제가 있으면 수정해서 완성하세요.
+
+━━━━━━━━━━━━━━━━━━
+[내용 원칙]
+━━━━━━━━━━━━━━━━━━
+- 확인된 사실만 사용하세요. 존재하지 않는 코스, 출처 없는 수치, 지어낸 전설이나 유래를 넣지 마세요.
+- 추천 이유는 한 글자도 의미를 바꾸지 말고 그대로 사용하세요. 가이드의 설명과 추천인의 감상을 섞지 마세요.
+- 단풍 절정 시기는 해마다 달라지므로 "예년 기준 10월 하순~11월 초"처럼 범위로 표현하세요.
+- 확인할 수 없는 정보는 임의로 지어내지 말고, 빼거나 "방문 전 확인"으로 표기하세요.
+
+━━━━━━━━━━━━━━━━━━
+[카드 구성 — 추천 이유가 가장 중요합니다]
+━━━━━━━━━━━━━━━━━━
+컨셉은 '여행 가이드가 직접 건네주는 단풍 명소 추천 가이드'입니다.
+- 카드 한쪽에 친근한 여행 가이드 캐릭터를 넣으세요. 가이드 깃발, 모자, 명찰, 배지처럼 한눈에 가이드임을 알 수 있는 소품을 들고 있어야 합니다.
+- 추천 이유는 가이드가 손님에게 건네는 말처럼 말풍선 또는 메모 카드 안에, 카드에서 가장 큰 글자로, 시선이 가장 먼저 닿는 자리에 배치하세요.
+- 추천 이유만 다정한 손글씨 느낌으로 표현하세요. 손글씨 연출은 추천 이유에만 한정하고, 나머지 텍스트는 선택한 디자인 스타일에 어울리는 서체로 또렷하게 구성하세요.
+- 장소명보다 추천 이유가 먼저 읽혀도 괜찮습니다. 그게 이 카드의 의도입니다.
+
+포함할 요소:
+- 장소명과 지역(시·군), 장소의 특징을 담은 부제 한 문장
+- 가이드의 추천 한마디 — 위에 적힌 추천 이유 그대로
+- 단풍 절정 시기 (예년 기준)
+- 추천 코스 또는 포토 스팟 2~3곳과 소요 시간
+- 가는 방법(대중교통·주차)과 입장료·운영시간 — 확인된 경우에만
+- 함께 둘러보세요 — 맛집/카페, {NEARTYPE} 각각 한 줄 소개와 거리
+- 가이드의 꿀팁 1~2가지 (혼잡 시간대, 준비물, 날씨 등)
+- 'PLAYDAY · 단풍 명소 가이드' — 여행 스탬프나 배지처럼 카드 한쪽 구석에
+
+━━━━━━━━━━━━━━━━━━
+[디자인]
+━━━━━━━━━━━━━━━━━━
+- 세로형 A4 비율, 가을의 정취가 느껴지는 완성도 높은 여행 가이드 디자인
+- 위에 적은 디자인 스타일을 충실히 반영하고, 단풍의 붉은색·주황색·금색을 중심으로 한 색감을 직접 제안해서 적용하세요.
+- 장소의 실제 풍경(단풍, 지형, 랜드마크)을 상징하는 비주얼을 사용하세요. 다른 지역의 랜드마크를 넣지 마세요.
+- 정보 위계를 분명하게 — 추천 이유 > 장소명 > 본문 순서로 크기를 구분하세요.
+- 한글은 또렷하게, 너무 작은 글자는 금지합니다.
+- 내용과 관계없는 인물이나 사물은 넣지 마세요.`;
+
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function naverUrl(q){return 'https://map.naver.com/p/search/' + encodeURIComponent(q);}
+  // 네이버 지도 검색어: "전북 정읍시 내장산 국립공원"처럼 지역명을 앞에 붙여 동명 장소와 구분
+  function naverQuery(name, address){
+    var region = (address||'').split(' ').slice(0,2).join(' ');
+    return region ? region + ' ' + name : name;
+  }
+
+  // ───────── 장소 자동완성 (카카오 로컬 키워드 검색) ─────────
+  // developers.kakao.com > 내 애플리케이션 > 앱 키 > JavaScript 키 를 넣고,
+  // 플랫폼 > Web 에 이 페이지가 열리는 도메인을 등록하세요. 비워 두면 새창 지도 검색 버튼으로 동작합니다.
+  var KAKAO_JS_KEY = 'a63cfdde761ec67be56dbb7bd8e5f196';
+  var search = { ready:false, query:function(q, cb){ cb([]); } };
+
+  function loadKakao(){
+    if(!KAKAO_JS_KEY) return;
+    var s = document.createElement('script');
+    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_JS_KEY + '&libraries=services&autoload=false';
+    s.onload = function(){
+      kakao.maps.load(function(){
+        var ps = new kakao.maps.services.Places();
+        search.query = function(q, cb){
+          ps.keywordSearch(q, function(data, status){
+            cb(status === kakao.maps.services.Status.OK ? data : []);
+          }, { size: 8 });
+        };
+        search.ready = true;
+        document.body.classList.add('has-ac');
+      });
+    };
+    document.head.appendChild(s);
+  }
+  loadKakao();
+
+  // 선택한 장소(이름·주소) — 프롬프트와 지도 링크에 사용
+  var picked = { place:null, food:null, near:null };
+
+  function showPicked(key){
+    var el = $('p-' + key), it = picked[key];
+    if(!it){ el.classList.remove('on'); el.innerHTML = ''; return; }
+    el.innerHTML = '📍 ' + esc(it.address) +
+      '<a href="' + esc(naverUrl(naverQuery(it.name, it.address))) + '" target="_blank" rel="noopener">네이버 지도 ↗</a>';
+    el.classList.add('on');
+  }
+
+  function attachAC(input, listEl, key, onPick){
+    var timer = null, items = [], active = -1;
+    function close(){ listEl.classList.remove('open'); listEl.innerHTML = ''; items = []; active = -1; }
+    function render(){
+      if(!items.length){
+        listEl.innerHTML = '<div class="ac-msg">검색 결과가 없어요. 다른 키워드로 적어보세요.</div>';
+      } else {
+        listEl.innerHTML = items.map(function(it, i){
+          return '<div class="ac-item' + (i === active ? ' active' : '') + '" data-i="' + i + '">' +
+            '<div class="nm">' + esc(it.place_name) +
+              (it.category_group_name ? '<span class="cat">' + esc(it.category_group_name) + '</span>' : '') + '</div>' +
+            '<div class="ad">' + esc(it.road_address_name || it.address_name) + '</div></div>';
+        }).join('');
+      }
+      listEl.classList.add('open');
+    }
+    function pick(i){
+      var it = items[i]; if(!it) return;
+      input.value = it.place_name;
+      close();
+      picked[key] = { name: it.place_name, address: it.road_address_name || it.address_name, category: it.category_group_name || '' };
+      showPicked(key);
+      onPick(picked[key]);
+    }
+    input.addEventListener('input', function(){
+      // 선택 후 글자를 고치면 선택 해제
+      if(picked[key] && picked[key].name !== input.value.trim()){ picked[key] = null; showPicked(key); onPick(null); }
+      if(!search.ready) return;
+      var q = input.value.trim();
+      clearTimeout(timer);
+      if(q.length < 2){ close(); return; }
+      timer = setTimeout(function(){
+        search.query(q, function(data){
+          if(input.value.trim() !== q) return;
+          items = data.slice(0, 8); active = -1; render();
+        });
+      }, 250);
+    });
+    input.addEventListener('keydown', function(e){
+      if(!listEl.classList.contains('open')) return;
+      if(e.key === 'ArrowDown'){ e.preventDefault(); active = Math.min(active + 1, items.length - 1); render(); }
+      else if(e.key === 'ArrowUp'){ e.preventDefault(); active = Math.max(active - 1, 0); render(); }
+      else if(e.key === 'Enter'){ if(active >= 0){ e.preventDefault(); pick(active); } }
+      else if(e.key === 'Escape'){ close(); }
+    });
+    // mousedown: blur로 목록이 닫히기 전에 선택
+    listEl.addEventListener('mousedown', function(e){
+      var el = e.target.closest('.ac-item'); if(!el) return;
+      e.preventDefault(); pick(+el.getAttribute('data-i'));
+    });
+    input.addEventListener('blur', function(){ setTimeout(close, 150); });
+  }
+
+  attachAC($('f-place'), $('ac-place'), 'place', function(it){
+    if(it){ $('f-address').value = it.address; }
+    buildPrompt();
+  });
+  attachAC($('f-food'), $('ac-food'), 'food', buildPrompt);
+  attachAC($('f-near'), $('ac-near'), 'near', buildPrompt);
+
+  var nearType = '관광지';
+  var nearIcon = '🏞️';
+
+  // "이름 (주소) — 지도: 링크" 형태로 프롬프트에 넣기
+  function placeLine(key, text, fallback){
+    var it = picked[key];
+    if(it){ return it.name + ' (' + it.address + ') — 지도: ' + naverUrl(naverQuery(it.name, it.address)); }
+    return text || fallback;
+  }
+
+  function buildPrompt(){
+    var place = $('f-place').value.trim();
+    var address = $('f-address').value.trim();
+    var reason = $('f-reason').value.trim();
+    var food = $('f-food').value.trim();
+    var near = $('f-near').value.trim();
+    var styleVal = $('f-style').value;
+    var style = styleVal === '__custom__' ? $('f-style-custom').value.trim() : styleVal;
+
+    var mapLink = place ? naverUrl(naverQuery(place, address)) : (address ? naverUrl(address) : '(장소를 입력하면 자동으로 채워집니다)');
+
+    var p = TEMPLATE
+      .split('{PLACE}').join(place || '(장소를 입력하세요)')
+      .split('{ADDRESS}').join(address || '(입력하지 않음 — 장소명으로 정확한 위치를 확인하세요)')
+      .split('{MAPLINK}').join(mapLink)
+      .split('{REASON}').join(reason || '(추천 이유를 입력하세요)')
+      .split('{FOOD}').join(placeLine('food', food, '(입력하지 않음 — 추천 장소 근처에서 평이 좋은 곳을 1곳 직접 찾아 제안하세요)'))
+      .split('{NEARTYPE}').join(nearType)
+      .split('{NEAR}').join(placeLine('near', near, '(입력하지 않음 — 추천 장소 근처에서 1곳 직접 찾아 제안하세요)'))
+      .split('{STYLE}').join(style || '장소의 풍경과 분위기에 가장 어울리는 스타일을 직접 제안해서 적용');
+    $('result-text').value = p;
+  }
+
+  // 새창 지도 검색 버튼(카카오 키가 없을 때의 대체 수단): 입력값이 있을 때만 활성화
+  function bindMap(inputId, btnId){
+    var input = $(inputId), btn = $(btnId);
+    function sync(){ btn.disabled = !input.value.trim(); }
+    input.addEventListener('input', sync);
+    btn.addEventListener('click', function(){
+      var q = input.value.trim();
+      if(q){ window.open(naverUrl(q), '_blank', 'noopener'); }
+    });
+    sync();
+  }
+  bindMap('f-place','btn-map-place');
+  bindMap('f-food','btn-map-food');
+  bindMap('f-near','btn-map-near');
+
+  ['f-place','f-address','f-reason','f-food','f-near','f-style-custom'].forEach(function(id){
+    $(id).addEventListener('input', buildPrompt);
+  });
+
+  $('f-reason').addEventListener('input', function(){
+    $('reason-count').textContent = this.value.length;
+  });
+
+  // 함께 둘러볼 곳 종류 선택
+  var nearPills = document.querySelectorAll('#near-pills .pill');
+  nearPills.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      nearPills.forEach(function(b){ b.classList.remove('selected'); });
+      this.classList.add('selected');
+      nearType = this.getAttribute('data-val');
+      nearIcon = this.getAttribute('data-icon');
+      $('near-type-label').textContent = nearIcon + ' ' + nearType;
+      buildPrompt();
+    });
+  });
+
+  // 디자인 스타일 선택
+  var pills = document.querySelectorAll('#style-pills .pill');
+  pills.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      pills.forEach(function(b){ b.classList.remove('selected'); });
+      this.classList.add('selected');
+      var val = this.getAttribute('data-val');
+      $('f-style').value = val;
+      $('f-style-custom').style.display = (val === '__custom__') ? 'block' : 'none';
+      if(val === '__custom__'){ $('f-style-custom').focus(); }
+      buildPrompt();
+    });
+  });
+
+  $('btn-copy').addEventListener('click', function(){
+    var ta = $('result-text');
+    var btn = this;
+    function done(){
+      btn.textContent = '복사 완료!';
+      btn.classList.add('done');
+      setTimeout(function(){btn.textContent='전체 복사';btn.classList.remove('done');},1800);
+    }
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    function fallbackCopy(){
+      try{ if(document.execCommand('copy')){ done(); } }catch(e){}
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(done).catch(fallbackCopy);
+    } else {
+      fallbackCopy();
+    }
+  });
+
+  buildPrompt();
+})();
+</script>
+</body>
+</html>

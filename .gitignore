@@ -1,0 +1,14 @@
+# 매그니픽 생성 원본 (웹에는 압축본 image/bg.jpg 만 사용)
+매그니픽_생성/
+
+# 작업용 문서
+매그니픽_연결_작업지시서.md
+
+# 디자인 원본
+*.ai
+*.psd
+
+# OS / 편집기 생성 파일
+Thumbs.db
+desktop.ini
+.DS_Store
