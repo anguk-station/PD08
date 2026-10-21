@@ -17,3 +17,8 @@ desktop.ini
 /PD08.png
 # 매그니픽에서 직접 내려받은 원본
 magnific__*.png
+
+# 일러스트레이터 임시파일
+~ai-*.tmp
+# 단풍잎 원본 시트 (웹에는 image/leaf_*.png 사용)
+/단풍잎들.png

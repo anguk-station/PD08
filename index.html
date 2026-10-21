@@ -28,7 +28,19 @@
   }
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
-  .page{max-width:900px;margin:0 auto;}
+  .page{position:relative;z-index:1;max-width:900px;margin:0 auto;}
+
+  /* ───────── 양옆 여백에 흩뿌린 단풍잎 (마우스가 지나가면 살짝 밀려남) ───────── */
+  .leaves{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+  .leaves .zone{position:absolute;top:0;bottom:0;width:calc(50% - 430px);}
+  .leaves .zone.l{left:0;}
+  .leaves .zone.r{right:0;}
+  .leaf{
+    position:absolute;display:block;will-change:transform;
+    filter:drop-shadow(0 6px 10px rgba(60,20,5,.22));
+    transition:transform 1.1s cubic-bezier(.22,.8,.3,1);
+  }
+  @media(max-width:1099px){ .leaves{display:none;} }
 
   /* ───────── 상단 히어로 이미지 (제목 포함) ───────── */
   .hero-img{max-width:900px;margin:0 auto;line-height:0;font-size:0;}
@@ -308,6 +320,12 @@
 <body>
 
 <!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
+
+<!-- 양옆 단풍잎 (넓은 화면에서만, 스크립트가 채움) -->
+<div class="leaves" aria-hidden="true">
+  <div class="zone l"></div>
+  <div class="zone r"></div>
+</div>
 
 <div class="page">
 
@@ -756,6 +774,65 @@
   });
 
   buildPrompt();
+
+  // ───────── 양옆 단풍잎 ─────────
+  // 고정 시드 난수: 새로고침해도 같은 자리에 같은 잎
+  var seed = 20261031;
+  function rnd(){ seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+
+  var leaves = [];
+  function plant(zone, count){
+    var frag = document.createDocumentFragment();
+    for(var i = 0; i < count; i++){
+      var img = document.createElement('img');
+      img.className = 'leaf';
+      img.src = 'image/leaves/leaf' + (1 + Math.floor(rnd() * 8)) + '.png';
+      img.alt = '';
+      var size = 56 + Math.floor(rnd() * 70);
+      img.style.width = size + 'px';
+      // 세로로 고르게, 가로는 여백 안에서 무작위
+      img.style.top = (2 + i * (92 / count) + rnd() * 5) + '%';
+      img.style.left = (rnd() * 82) + '%';
+      var leaf = { el: img, rot: Math.floor(rnd() * 360), dx: 0, dy: 0, dr: 0 };
+      img.style.transform = 'rotate(' + leaf.rot + 'deg)';
+      leaves.push(leaf);
+      frag.appendChild(img);
+    }
+    zone.appendChild(frag);
+  }
+  var zoneL = document.querySelector('.leaves .zone.l');
+  var zoneR = document.querySelector('.leaves .zone.r');
+  if(zoneL && zoneR){
+    plant(zoneL, 11);
+    plant(zoneR, 11);
+
+    // 마우스가 가까이 오면 잎이 바깥쪽으로 살짝 밀리고 돌아가며, 멀어지면 제자리로
+    var RADIUS = 180, PUSH = 46, mx = -9999, my = -9999, pending = false;
+    function nudge(){
+      pending = false;
+      for(var i = 0; i < leaves.length; i++){
+        var L = leaves[i], r = L.el.getBoundingClientRect();
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        var ddx = cx - mx, ddy = cy - my, d = Math.sqrt(ddx * ddx + ddy * ddy);
+        var ndx = 0, ndy = 0, ndr = 0;
+        if(d < RADIUS && d > 0){
+          var k = 1 - d / RADIUS;            // 가까울수록 1
+          ndx = ddx / d * PUSH * k;
+          ndy = ddy / d * PUSH * k;
+          ndr = (ddx > 0 ? 1 : -1) * 18 * k; // 밀리는 쪽으로 살짝 기울기
+        }
+        if(ndx !== L.dx || ndy !== L.dy || ndr !== L.dr){
+          L.dx = ndx; L.dy = ndy; L.dr = ndr;
+          L.el.style.transform = 'translate(' + ndx.toFixed(1) + 'px,' + ndy.toFixed(1) + 'px) rotate(' + (L.rot + ndr).toFixed(1) + 'deg)';
+        }
+      }
+    }
+    document.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      if(!pending){ pending = true; requestAnimationFrame(nudge); }
+    }, { passive:true });
+    document.addEventListener('mouseleave', function(){ mx = my = -9999; nudge(); });
+  }
 })();
 </script>
 </body>
