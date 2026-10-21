@@ -397,16 +397,11 @@
               </div>
               <div class="ac-list" id="ac-place"></div>
             </div>
-            <div class="help">
-              <span class="ac-on">장소명을 입력하면 아래에 후보가 펼쳐집니다. 하나를 클릭하면 주소가 자동으로 채워져요.</span>
-              <span class="ac-off">장소명을 적고 <b>지도 검색</b>을 누르면 새 창에서 위치가 열립니다. 주소를 복사해 아래에 붙여 넣어주세요.</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <label>상세 주소 <span class="opt">(선택)</span></label>
-            <input id="f-address" type="text" placeholder="예) 전북 정읍시 내장동 산 231" />
             <div class="picked" id="p-place"></div>
+            <div class="help">
+              <span class="ac-on">장소명을 입력하면 아래에 후보가 펼쳐집니다. 하나를 클릭하면 주소와 지도 링크가 함께 표시돼요.</span>
+              <span class="ac-off">장소명을 적고 <b>지도 검색</b>을 누르면 새 창에서 위치를 확인할 수 있어요.</span>
+            </div>
           </div>
 
           <div class="field hl">
@@ -542,7 +537,7 @@
 [추천인 입력 내용]
 ━━━━━━━━━━━━━━━━━━
 ■ 추천 장소: {PLACE}
-■ 상세 주소: {ADDRESS}
+■ 주소: {ADDRESS}
 ■ 네이버 지도: {MAPLINK}
 ■ 추천 이유 / 팁 (가장 중요): {REASON}
 ■ 함께 둘러보세요
@@ -695,10 +690,7 @@
     input.addEventListener('blur', function(){ setTimeout(close, 150); });
   }
 
-  attachAC($('f-place'), $('ac-place'), 'place', function(it){
-    if(it){ $('f-address').value = it.address; }
-    buildPrompt();
-  });
+  attachAC($('f-place'), $('ac-place'), 'place', buildPrompt);
   attachAC($('f-food'), $('ac-food'), 'food', buildPrompt);
   attachAC($('f-near'), $('ac-near'), 'near', buildPrompt);
 
@@ -714,7 +706,7 @@
 
   function buildPrompt(){
     var place = $('f-place').value.trim();
-    var address = $('f-address').value.trim();
+    var address = picked.place ? picked.place.address : '';
     var reason = $('f-reason').value.trim();
     var food = $('f-food').value.trim();
     var near = $('f-near').value.trim();
@@ -725,7 +717,7 @@
 
     var p = TEMPLATE
       .split('{PLACE}').join(place || '(장소를 입력하세요)')
-      .split('{ADDRESS}').join(address || '(입력하지 않음 — 장소명으로 정확한 위치를 확인하세요)')
+      .split('{ADDRESS}').join(address || '(장소명으로 정확한 위치를 확인하세요)')
       .split('{MAPLINK}').join(mapLink)
       .split('{REASON}').join(reason || '(추천 이유를 입력하세요)')
       .split('{FOOD}').join(placeLine('food', food, '(입력하지 않음 — 추천 장소 근처에서 평이 좋은 곳을 1곳 직접 찾아 제안하세요)'))
@@ -750,7 +742,7 @@
   bindMap('f-food','btn-map-food');
   bindMap('f-near','btn-map-near');
 
-  ['f-place','f-address','f-reason','f-food','f-near','f-style-custom'].forEach(function(id){
+  ['f-place','f-reason','f-food','f-near','f-style-custom'].forEach(function(id){
     $(id).addEventListener('input', buildPrompt);
   });
 
