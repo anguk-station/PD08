@@ -28,18 +28,46 @@
   }
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
-  /* ───────── 히어로: 배경 사진 + HTML 텍스트 ───────── */
+  /* ───────── 양옆 단풍 가로수길 (스크롤하면 차창 밖으로 지나감) ───────── */
+  .roadside{
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+    perspective:700px;perspective-origin:50% 45%;
+    /* 가로수 사이로 보이는 하늘과 도로 */
+    background:linear-gradient(to bottom, #F4E9DA 0%, #F1E2CC 50%, #8C7F72 50%, #6E645B 100%);
+  }
+  .roadside .wall{
+    position:absolute;top:0;height:100%;width:4000px;
+    background:url("image/roadside.jpg") repeat-x 0 0 / auto 100%;
+    backface-visibility:hidden;will-change:background-position;
+  }
+  .roadside .wall.l{left:0;transform-origin:left center;transform:rotateY(72deg);}
+  .roadside .wall.r{right:0;transform-origin:right center;transform:rotateY(-72deg);}
+  .roadside::after{
+    /* 본문 쪽(먼 곳)으로 갈수록 살짝 안개 */
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse 40% 60% at 50% 45%, rgba(244,233,218,.7), transparent 70%);
+  }
+  .page{position:relative;z-index:1;max-width:900px;margin:0 auto;background:var(--paper);}
+  @media(min-width:1100px){
+    body{background:#6E645B;}
+    .page{box-shadow:0 0 60px rgba(40,15,8,.35);}
+  }
+  @media(max-width:1099px){ .roadside{display:none;} }
+
+  /* ───────── 히어로: 앞유리 너머 가족 드라이브 + HTML 텍스트 ───────── */
   .hero{
     position:relative;max-width:900px;margin:0 auto;
-    min-height:640px;overflow:hidden;
-    background:#5a2a1a url("image/bg.jpg") center/cover no-repeat;
+    aspect-ratio:4/3;overflow:hidden;
+    background:#5a2a1a url("image/hero_drive.jpg") center bottom/cover no-repeat;
     display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-    padding:56px 24px 60px;text-align:center;color:#fff;
+    padding:52px 24px 0;text-align:center;color:#fff;
   }
   .hero::before{
     content:"";position:absolute;inset:0;
-    background:linear-gradient(to bottom, rgba(40,15,8,.42) 0%, rgba(40,15,8,.08) 38%, rgba(40,15,8,.18) 100%);
+    background:linear-gradient(to bottom, rgba(40,15,8,.55) 0%, rgba(40,15,8,.22) 30%, rgba(40,15,8,0) 48%);
   }
+  .intro-wrap{position:relative;z-index:2;margin:-84px auto 0;padding:0 50px;max-width:900px;}
+  .intro-wrap .intro{margin:0 auto;}
   .hero > *{position:relative;z-index:1;}
   .hero .brand{
     font-family:'Michroma',sans-serif;font-size:66px;letter-spacing:.06em;
@@ -51,48 +79,29 @@
     margin-top:26px;font-size:21px;font-weight:600;letter-spacing:-.02em;
     color:#FFF4E3;text-shadow:0 2px 12px rgba(0,0,0,.5);
   }
-  .hero .intro{
-    margin-top:auto;width:100%;max-width:800px;
+  .intro{
+    width:100%;max-width:800px;text-align:center;
     background:rgba(255,250,240,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,.85);border-radius:20px;
     padding:38px 34px 36px;color:var(--ink);
     box-shadow:0 18px 44px rgba(50,20,10,.28);
     font-size:19px;line-height:2.05;letter-spacing:-.02em;
   }
-  .hero .intro p{margin:0;}
-  .hero .intro b{color:var(--maple-deep);}
-  .hero .intro .em{
+  .intro p{margin:0;word-break:keep-all;}
+  .intro b{color:var(--maple-deep);}
+  .intro .em{
     background:linear-gradient(transparent 55%, rgba(224,160,64,.45) 55%);padding:0 2px;font-weight:700;
   }
   @media(max-width:600px){
-    .hero{min-height:620px;padding:40px 18px 40px;}
+    .hero{aspect-ratio:4/5;padding:36px 18px 0;}
     .hero .brand{font-size:40px;}
-    .hero .sub{font-size:16.5px;margin-top:18px;}
-    .hero .intro{padding:26px 20px;font-size:16px;line-height:1.9;margin-top:34px;}
-  }
-
-  /* ───────── 소개 밴드: 제목 + 3단계 카드 ───────── */
-  .overview{text-align:center;padding:64px 0 10px;}
-  .overview .hanja{
-    font-family:'Gowun Batang',serif;font-size:15px;letter-spacing:.5em;color:var(--maple-soft);
-  }
-  .overview h1{
-    font-family:'Gowun Batang',serif;font-size:44px;color:var(--maple-deep);
-    letter-spacing:.08em;margin-top:6px;line-height:1.3;
-  }
-  .overview h2{
-    font-family:'Gowun Batang',serif;font-size:27px;font-weight:400;color:var(--maple-soft);
-    margin-top:4px;letter-spacing:.02em;
-  }
-  .overview hr{border:none;border-top:1px solid var(--card-line);margin:36px auto 0;max-width:860px;}
-  @media(max-width:600px){
-    .overview{padding-top:48px;}
-    .overview h1{font-size:32px;}
-    .overview h2{font-size:20px;}
+    .hero .sub{font-size:16.5px;margin-top:14px;}
+    .intro-wrap{margin-top:-48px;padding:0 16px;}
+    .intro{padding:24px 18px;font-size:15.5px;line-height:1.9;}
   }
 
   /* ───────── STEP 플로우 ───────── */
-  .section{padding:40px 0 56px;}
+  .section{padding:64px 0 56px;}
   .flow{position:relative;}
   .step-block{
     position:relative;margin:0 0 44px 26px;
@@ -347,27 +356,28 @@
 
 <!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
 
-<!-- 히어로: 배경 사진 위에 HTML 텍스트 -->
+<!-- 양옆 단풍 가로수길 (넓은 화면에서만) -->
+<div class="roadside" aria-hidden="true">
+  <div class="wall l"></div>
+  <div class="wall r"></div>
+</div>
+
+<div class="page">
+
+<!-- 히어로: 앞유리 너머 가족 드라이브 + HTML 텍스트 -->
 <header class="hero">
   <div class="brand">PLAYDAY</div>
   <div class="sub">- 나만의 가을 단풍 명소를 추천해주세요 -</div>
+</header>
+<div class="intro-wrap">
   <div class="intro">
     <p>올해 가을, 가장 눈부셨던 단풍은 어디였나요?</p>
     <p>오늘 하루, 여러분은 동료들을 안내하는 <b>'단풍 명소 여행 가이드'</b>입니다.</p>
     <p>마음속 <span class="em">'단풍 명소 한 곳'</span>과 <span class="em">'추천 이유 한 줄'</span>을 남겨주시면</p>
     <p>AI가 멋진 여행 가이드 카드로 완성해 드립니다.</p>
   </div>
-</header>
-
-<!-- 소개 밴드 -->
-<div class="wrap">
-  <div class="overview">
-    <div class="hanja">丹 楓 名 所</div>
-    <h1>단풍 명소 가이드</h1>
-    <h2>가을 여행 가이드가 되는 3단계</h2>
-    <hr />
-  </div>
 </div>
+
 
 <section class="section">
   <div class="wrap">
@@ -523,6 +533,8 @@
     <img src="image/brand_footer.png" alt="워크이노베이션센터 · AI디자인랩" />
   </div>
 </div>
+
+</div><!-- /.page -->
 
 <!-- ▲▲▲ 여기까지 ▲▲▲ -->
 <script>
@@ -798,6 +810,22 @@
   });
 
   buildPrompt();
+
+  // 가로수길: 스크롤한 만큼 나무가 앞(바깥쪽)으로 다가옴
+  var walls = document.querySelectorAll('.roadside .wall');
+  if(walls.length === 2){
+    var ticking = false;
+    function drive(){
+      var d = window.scrollY * 1.6;
+      walls[0].style.backgroundPositionX = (-d) + 'px';
+      walls[1].style.backgroundPositionX = d + 'px';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ ticking = true; requestAnimationFrame(drive); }
+    }, { passive:true });
+    drive();
+  }
 })();
 </script>
 </body>
