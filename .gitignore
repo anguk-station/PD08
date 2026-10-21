@@ -24,3 +24,8 @@ magnific__*.png
 /단풍잎들.png
 # 직접 누끼 딴 단풍잎 원본 (웹에는 image/leaves/ 사용)
 /Leap*.png
+# 양옆 잔디 배경 원본 (웹에는 image/bg_l.jpg, bg_r.jpg)
+/bg.png
+/bg2.png
+# 상단 이미지 아트보드 원본
+/2대지*.png

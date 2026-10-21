@@ -24,10 +24,13 @@
   html{scroll-behavior:smooth;}
   body{
     font-family:'Pretendard',-apple-system,sans-serif;
-    /* 가을 흙길을 하늘에서 내려다본 바닥 — 본문 양옆으로 보임 */
-    background:#6B5A48 url("image/ground.jpg") center top/cover no-repeat fixed;
-    color:var(--ink);line-height:1.7;
+    background:#B9A98A;color:var(--ink);line-height:1.7;
   }
+  /* 양옆 마른 잔디 바닥 (왼쪽 bg_l, 오른쪽 bg_r) */
+  .ground{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .ground .half{position:absolute;top:0;bottom:0;width:50%;background-size:cover;background-position:center top;}
+  .ground .half.l{left:0;background-image:url("image/bg_l.jpg");}
+  .ground .half.r{right:0;background-image:url("image/bg_r.jpg");}
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
   .page{
@@ -326,6 +329,12 @@
 
 <!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
 
+<!-- 양옆 잔디 바닥 -->
+<div class="ground" aria-hidden="true">
+  <div class="half l"></div>
+  <div class="half r"></div>
+</div>
+
 <!-- 양옆 단풍잎 (넓은 화면에서만, 스크립트가 채움) -->
 <div class="leaves" aria-hidden="true">
   <div class="zone l"></div>
@@ -336,7 +345,7 @@
 
 <!-- 상단 히어로 이미지 -->
 <div class="hero-img">
-  <img src="image/PD08.png" alt="PLAYDAY — 아름다운 단풍 명소 추천 가이드 제작" />
+  <img src="image/PD08.jpg" alt="PLAYDAY — 아름다운 단풍 명소 추천 가이드 제작" />
 </div>
 <div class="intro-wrap">
   <div class="intro">
@@ -797,8 +806,9 @@
       var size = 56 + Math.floor(rnd() * 70);
       img.style.width = size + 'px';
       // 세로로 고르게, 가로는 여백 안에서 무작위
-      img.style.top = (2 + i * (92 / count) + rnd() * 5) + '%';
-      img.style.left = (rnd() * 82) + '%';
+      // 두 줄로 지그재그: 짝수는 바깥쪽, 홀수는 안쪽 띠에 두고 세로는 고르게
+      img.style.top = (-3 + i * (100 / count) + rnd() * 4) + '%';
+      img.style.left = ((i % 2 ? 45 : 0) + rnd() * 45) + '%';
       var leaf = { el: img, rot: Math.floor(rnd() * 360), dx: 0, dy: 0, dr: 0 };
       img.style.transform = 'rotate(' + leaf.rot + 'deg)';
       leaves.push(leaf);
@@ -809,8 +819,8 @@
   var zoneL = document.querySelector('.leaves .zone.l');
   var zoneR = document.querySelector('.leaves .zone.r');
   if(zoneL && zoneR){
-    plant(zoneL, 15);
-    plant(zoneR, 15);
+    plant(zoneL, 26);
+    plant(zoneR, 26);
 
     // 마우스가 가까이 오면 잎이 바깥쪽으로 살짝 밀리고 돌아가며, 멀어지면 제자리로
     var RADIUS = 180, PUSH = 46, mx = -9999, my = -9999, pending = false;
