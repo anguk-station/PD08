@@ -22,3 +22,5 @@ magnific__*.png
 ~ai-*.tmp
 # 단풍잎 원본 시트 (웹에는 image/leaf_*.png 사용)
 /단풍잎들.png
+# 직접 누끼 딴 단풍잎 원본 (웹에는 image/leaves/ 사용)
+/Leap*.png
