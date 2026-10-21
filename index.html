@@ -46,7 +46,7 @@
   .leaf{
     position:absolute;display:block;will-change:transform;
     filter:drop-shadow(0 5px 7px rgba(30,15,5,.45));
-    transition:transform 1.1s cubic-bezier(.22,.8,.3,1);
+    transition:transform 1.9s cubic-bezier(.3,.7,.25,1);
   }
   @media(max-width:1099px){ .leaves{display:none;} }
 
@@ -58,6 +58,7 @@
   .leaf-bridge img{
     position:absolute;bottom:0;width:30%;height:auto;
     filter:drop-shadow(0 8px 14px rgba(40,15,5,.35));
+    will-change:transform;transition:transform 1.9s cubic-bezier(.3,.7,.25,1);
   }
   .intro-wrap{position:relative;z-index:2;margin:-84px auto 0;padding:0 50px;max-width:900px;}
   .intro-wrap .intro{margin:0 auto;}
@@ -864,15 +865,13 @@
       var k = 1 + Math.floor(rnd() * 18);
       img.src = 'image/leaves/leaf' + (k < 10 ? '0' : '') + k + '.png';
       img.alt = '';
-      var size = 56 + Math.floor(rnd() * 70);
+      var size = 44 + Math.floor(rnd() * 70);
       img.style.width = size + 'px';
-      // 세로로 고르게, 가로는 여백 안에서 무작위
-      // 두 줄로 지그재그: 짝수는 바깥쪽, 홀수는 안쪽 띠에 두고 세로는 고르게
-      img.style.top = (-3 + i * (100 / count) + rnd() * 4) + '%';
-      img.style.left = ((i % 2 ? 45 : 0) + rnd() * 45) + '%';
-      var leaf = { el: img, rot: Math.floor(rnd() * 360), dx: 0, dy: 0, dr: 0 };
-      img.style.transform = 'rotate(' + leaf.rot + 'deg)';
-      leaves.push(leaf);
+      // 세로로 고르게 퍼뜨리고, 가로는 여백 안에서 무작위
+      img.style.top = (-4 + i * (102 / count) + rnd() * 3) + '%';
+      img.style.left = (rnd() * 92 - 4) + '%';
+      leaves.push({ el: img, fixed: true, base: 'rotate(' + Math.floor(rnd() * 360) + 'deg)', spin: rnd() < .5 ? -1 : 1, moved: false });
+      img.style.transform = leaves[leaves.length - 1].base;
       frag.appendChild(img);
     }
     zone.appendChild(frag);
@@ -880,35 +879,81 @@
   var zoneL = document.querySelector('.leaves .zone.l');
   var zoneR = document.querySelector('.leaves .zone.r');
   if(zoneL && zoneR){
-    plant(zoneL, 26);
-    plant(zoneR, 26);
+    plant(zoneL, 104);
+    plant(zoneR, 104);
+    // 상단 이미지와 소개 카드를 잇는 큰 잎들도 같은 효과 (인라인 rotate/scaleX는 기본값으로 유지)
+    document.querySelectorAll('.leaf-bridge img').forEach(function(img){
+      leaves.push({ el: img, fixed: false, base: img.style.transform || '', spin: rnd() < .5 ? -1 : 1, moved: false });
+    });
 
-    // 마우스가 가까이 오면 잎이 바깥쪽으로 살짝 밀리고 돌아가며, 멀어지면 제자리로
-    var RADIUS = 180, PUSH = 46, mx = -9999, my = -9999, pending = false;
-    function nudge(){
+    // 잎의 제자리 중심 좌표 (transform 영향 없는 레이아웃 기준으로 계산)
+    // 양옆 잎은 화면 고정이라 화면 좌표, 브리지 잎은 문서와 함께 스크롤되므로 문서 좌표로 저장
+    function measure(){
+      leaves.forEach(function(L){
+        var p = L.el.offsetParent; if(!p) return;
+        var pr = p.getBoundingClientRect();
+        L.cx = pr.left + L.el.offsetLeft + L.el.offsetWidth / 2 + (L.fixed ? 0 : window.scrollX);
+        L.cy = pr.top + L.el.offsetTop + L.el.offsetHeight / 2 + (L.fixed ? 0 : window.scrollY);
+        L.size = L.el.offsetWidth;
+      });
+    }
+    window.addEventListener('load', measure);
+    window.addEventListener('resize', measure);
+
+    // 커서가 지나가면 그 방향으로 바람이 불듯 잎이 날려가며 빙글 돌고, 커서가 멈추면 천천히 제자리로
+    var RADIUS = 210, GUST = 120, SPIN = 75;
+    var mx = 0, my = 0, vx = 0, vy = 0, lastX = null, lastY = null, pending = false, settleTimer = null;
+    var BLOW = 'transform .55s cubic-bezier(.15,.85,.3,1)';
+    var SETTLE = 'transform 1.9s cubic-bezier(.3,.7,.25,1)';
+
+    function blow(){
       pending = false;
+      if(leaves[0] && leaves[0].cx === undefined) measure();
+      var speed = Math.sqrt(vx * vx + vy * vy);
+      var ux = speed ? vx / speed : 0, uy = speed ? vy / speed : 0;  // 바람 방향 = 커서 이동 방향
+      var power = Math.min(1, 0.25 + speed / 35);                       // 빠르게 휘저을수록 세게
       for(var i = 0; i < leaves.length; i++){
-        var L = leaves[i], r = L.el.getBoundingClientRect();
-        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        var ddx = cx - mx, ddy = cy - my, d = Math.sqrt(ddx * ddx + ddy * ddy);
-        var ndx = 0, ndy = 0, ndr = 0;
-        if(d < RADIUS && d > 0){
-          var k = 1 - d / RADIUS;            // 가까울수록 1
-          ndx = ddx / d * PUSH * k;
-          ndy = ddy / d * PUSH * k;
-          ndr = (ddx > 0 ? 1 : -1) * 18 * k; // 밀리는 쪽으로 살짝 기울기
-        }
-        if(ndx !== L.dx || ndy !== L.dy || ndr !== L.dr){
-          L.dx = ndx; L.dy = ndy; L.dr = ndr;
-          L.el.style.transform = 'translate(' + ndx.toFixed(1) + 'px,' + ndy.toFixed(1) + 'px) rotate(' + (L.rot + ndr).toFixed(1) + 'deg)';
-        }
+        var L = leaves[i];
+        var lx = L.fixed ? L.cx : L.cx - window.scrollX;
+        var ly = L.fixed ? L.cy : L.cy - window.scrollY;
+        var ddx = lx - mx, ddy = ly - my, d = Math.sqrt(ddx * ddx + ddy * ddy);
+        var R = RADIUS + L.size * 0.4;
+        if(d >= R || d === 0) continue;
+        var k = (1 - d / R) * power;
+        // 바깥으로 밀리는 힘 + 커서가 움직이는 방향으로 실려 가는 힘
+        var dirx = ddx / d * 0.45 + ux, diry = ddy / d * 0.45 + uy;
+        var n = Math.sqrt(dirx * dirx + diry * diry) || 1;
+        var tx = dirx / n * GUST * k, ty = diry / n * GUST * k;
+        // 커서 진행 방향 기준으로 어느 쪽에 있느냐에 따라 회전 방향 결정
+        var side = (ux * ddy - uy * ddx) >= 0 ? 1 : -1;
+        var rot = (speed ? side : L.spin) * SPIN * k;
+        L.el.style.transition = BLOW;
+        L.el.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) ' + L.base + ' rotate(' + rot.toFixed(1) + 'deg)';
+        L.moved = true;
       }
+      // 커서가 멈추면 바람도 잦아들어 제자리로
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 220);
+    }
+    function settle(){
+      vx = vy = 0;
+      leaves.forEach(function(L){
+        if(!L.moved) return;
+        L.el.style.transition = SETTLE;
+        L.el.style.transform = L.base;
+        L.moved = false;
+      });
     }
     document.addEventListener('mousemove', function(e){
-      mx = e.clientX; my = e.clientY;
-      if(!pending){ pending = true; requestAnimationFrame(nudge); }
+      if(lastX !== null){
+        // 커서 속도를 부드럽게 따라감
+        vx = vx * 0.6 + (e.clientX - lastX) * 0.4;
+        vy = vy * 0.6 + (e.clientY - lastY) * 0.4;
+      }
+      lastX = mx = e.clientX; lastY = my = e.clientY;
+      if(!pending){ pending = true; requestAnimationFrame(blow); }
     }, { passive:true });
-    document.addEventListener('mouseleave', function(){ mx = my = -9999; nudge(); });
+    document.addEventListener('mouseleave', function(){ lastX = lastY = null; settle(); });
   }
 })();
 </script>
