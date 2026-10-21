@@ -12,3 +12,8 @@
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# 상단 이미지 원본 (웹에는 image/PD08.png 사용)
+/PD08.png
+# 매그니픽에서 직접 내려받은 원본
+magnific__*.png

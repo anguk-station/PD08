@@ -6,7 +6,7 @@
 <title>PLAYDAY 08 · 단풍 명소 가이드 — 나만의 가을 단풍 명소를 추천해주세요</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&family=Michroma&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#FBF7F0;
@@ -28,48 +28,13 @@
   }
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
-  /* ───────── 양옆 고정 배경: 왼쪽 반계리 은행나무 드론샷, 오른쪽 가족 셀카 ───────── */
-  .sides{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#3A2410;}
-  .sides .side{position:absolute;top:0;bottom:0;width:50%;background-size:cover;background-repeat:no-repeat;}
-  /* 본문이 가운데를 가리므로 바깥쪽 가장자리에 볼거리가 오도록 정렬 */
-  .sides .side.l{left:0;background-image:url("image/side_drone.jpg");background-position:left center;}
-  .sides .side.r{right:0;background-image:url("image/side_selfie.jpg");background-position:right center;}
-  /* 본문과 만나는 안쪽을 살짝 어둡게 해 본문이 떠 보이게 */
-  .sides::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(to right, transparent 25%, rgba(40,15,8,.45) 50%, transparent 75%);
-  }
-  .page{position:relative;z-index:1;max-width:900px;margin:0 auto;background:var(--paper);}
-  @media(min-width:1100px){
-    .page{box-shadow:0 0 70px rgba(40,15,8,.5);}
-  }
-  @media(max-width:1099px){ .sides{display:none;} }
+  .page{max-width:900px;margin:0 auto;}
 
-  /* ───────── 히어로: 앞유리 너머 가족 드라이브 + HTML 텍스트 ───────── */
-  .hero{
-    position:relative;max-width:900px;margin:0 auto;
-    aspect-ratio:4/3;overflow:hidden;
-    background:#5a2a1a url("image/hero_drive.jpg") center bottom/cover no-repeat;
-    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-    padding:52px 24px 0;text-align:center;color:#fff;
-  }
-  .hero::before{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(to bottom, rgba(40,15,8,.55) 0%, rgba(40,15,8,.22) 30%, rgba(40,15,8,0) 48%);
-  }
+  /* ───────── 상단 히어로 이미지 (제목 포함) ───────── */
+  .hero-img{max-width:900px;margin:0 auto;line-height:0;font-size:0;}
+  .hero-img img{display:block;width:100%;height:auto;border:0;}
   .intro-wrap{position:relative;z-index:2;margin:-84px auto 0;padding:0 50px;max-width:900px;}
   .intro-wrap .intro{margin:0 auto;}
-  .hero > *{position:relative;z-index:1;}
-  .hero .brand{
-    font-family:'Michroma',sans-serif;font-size:66px;letter-spacing:.06em;
-    line-height:1;color:#FFF8EC;
-    text-shadow:0 4px 22px rgba(0,0,0,.45);
-    margin-top:14px;
-  }
-  .hero .sub{
-    margin-top:26px;font-size:21px;font-weight:600;letter-spacing:-.02em;
-    color:#FFF4E3;text-shadow:0 2px 12px rgba(0,0,0,.5);
-  }
   .intro{
     width:100%;max-width:800px;text-align:center;
     background:rgba(255,250,240,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -84,9 +49,6 @@
     background:linear-gradient(transparent 55%, rgba(224,160,64,.45) 55%);padding:0 2px;font-weight:700;
   }
   @media(max-width:600px){
-    .hero{aspect-ratio:4/5;padding:36px 18px 0;}
-    .hero .brand{font-size:40px;}
-    .hero .sub{font-size:16.5px;margin-top:14px;}
     .intro-wrap{margin-top:-48px;padding:0 16px;}
     .intro{padding:24px 18px;font-size:15.5px;line-height:1.9;}
   }
@@ -347,19 +309,12 @@
 
 <!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
 
-<!-- 양옆 고정 배경 (넓은 화면에서만) -->
-<div class="sides" aria-hidden="true">
-  <div class="side l"></div>
-  <div class="side r"></div>
-</div>
-
 <div class="page">
 
-<!-- 히어로: 앞유리 너머 가족 드라이브 + HTML 텍스트 -->
-<header class="hero">
-  <div class="brand">PLAYDAY</div>
-  <div class="sub">- 나만의 가을 단풍 명소를 추천해주세요 -</div>
-</header>
+<!-- 상단 히어로 이미지 -->
+<div class="hero-img">
+  <img src="image/PD08.png" alt="PLAYDAY — 아름다운 단풍 명소 추천 가이드 제작" />
+</div>
 <div class="intro-wrap">
   <div class="intro">
     <p>올해 가을, 가장 눈부셨던 단풍은 어디였나요?</p>
