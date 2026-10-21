@@ -28,25 +28,22 @@
   }
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
-  /* ───────── 양옆 단풍 가로수길: 운전석 시점 사진을 스크롤할수록 소실점으로 확대 ───────── */
-  .roadside{
-    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#7A3A22;
-  }
-  .roadside .road{
-    position:absolute;inset:0;
-    background:url("image/road_pov.jpg") center 45%/cover no-repeat;
-    transform-origin:50% 45%;will-change:transform;
-  }
-  /* 화면 가장자리로 갈수록 살짝 어둡게(속도감) */
-  .roadside::after{
+  /* ───────── 양옆 고정 배경: 왼쪽 반계리 은행나무 드론샷, 오른쪽 가족 셀카 ───────── */
+  .sides{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#3A2410;}
+  .sides .side{position:absolute;top:0;bottom:0;width:50%;background-size:cover;background-repeat:no-repeat;}
+  /* 본문이 가운데를 가리므로 바깥쪽 가장자리에 볼거리가 오도록 정렬 */
+  .sides .side.l{left:0;background-image:url("image/side_drone.jpg");background-position:left center;}
+  .sides .side.r{right:0;background-image:url("image/side_selfie.jpg");background-position:right center;}
+  /* 본문과 만나는 안쪽을 살짝 어둡게 해 본문이 떠 보이게 */
+  .sides::after{
     content:"";position:absolute;inset:0;
-    background:radial-gradient(ellipse 75% 85% at 50% 45%, transparent 55%, rgba(40,15,8,.35) 100%);
+    background:linear-gradient(to right, transparent 25%, rgba(40,15,8,.45) 50%, transparent 75%);
   }
   .page{position:relative;z-index:1;max-width:900px;margin:0 auto;background:var(--paper);}
   @media(min-width:1100px){
-    .page{box-shadow:0 0 70px rgba(40,15,8,.45);}
+    .page{box-shadow:0 0 70px rgba(40,15,8,.5);}
   }
-  @media(max-width:1099px){ .roadside{display:none;} }
+  @media(max-width:1099px){ .sides{display:none;} }
 
   /* ───────── 히어로: 앞유리 너머 가족 드라이브 + HTML 텍스트 ───────── */
   .hero{
@@ -350,9 +347,10 @@
 
 <!-- ▼▼▼ 게시판에 붙여넣을 때는 body 내부 전체를 복사하세요 ▼▼▼ -->
 
-<!-- 양옆 단풍 가로수길 (넓은 화면에서만) -->
-<div class="roadside" aria-hidden="true">
-  <div class="road"></div>
+<!-- 양옆 고정 배경 (넓은 화면에서만) -->
+<div class="sides" aria-hidden="true">
+  <div class="side l"></div>
+  <div class="side r"></div>
 </div>
 
 <div class="page">
@@ -803,29 +801,6 @@
   });
 
   buildPrompt();
-
-  // 가로수길: 스크롤 진행만큼 길 끝(소실점)으로 다가가듯 확대
-  var road = document.querySelector('.roadside .road');
-  if(road){
-    var ZOOM = 0.35; // 맨 아래까지 내렸을 때 1.35배 — 천천히 다가가는 정도
-    var cur = 1, running = false;
-    function target(){
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      return 1 + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) * ZOOM;
-    }
-    // 스크롤을 바로 따라가지 않고 부드럽게 감속하며 따라감
-    function drive(){
-      var goal = target();
-      cur += (goal - cur) * 0.06;
-      if(Math.abs(goal - cur) < 0.0005){ cur = goal; running = false; }
-      road.style.transform = 'scale(' + cur.toFixed(4) + ')';
-      if(running) requestAnimationFrame(drive);
-    }
-    window.addEventListener('scroll', function(){
-      if(!running){ running = true; requestAnimationFrame(drive); }
-    }, { passive:true });
-    cur = target(); road.style.transform = 'scale(' + cur + ')';
-  }
 })();
 </script>
 </body>
