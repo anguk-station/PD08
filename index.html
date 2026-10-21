@@ -28,29 +28,23 @@
   }
   .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
 
-  /* ───────── 양옆 단풍 가로수길 (스크롤하면 차창 밖으로 지나감) ───────── */
+  /* ───────── 양옆 단풍 가로수길: 운전석 시점 사진을 스크롤할수록 소실점으로 확대 ───────── */
   .roadside{
-    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-    perspective:700px;perspective-origin:50% 45%;
-    /* 가로수 사이로 보이는 하늘과 도로 */
-    background:linear-gradient(to bottom, #F4E9DA 0%, #F1E2CC 50%, #8C7F72 50%, #6E645B 100%);
+    position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#7A3A22;
   }
-  .roadside .wall{
-    position:absolute;top:0;height:100%;width:4000px;
-    background:url("image/roadside.jpg") repeat-x 0 0 / auto 100%;
-    backface-visibility:hidden;will-change:background-position;
+  .roadside .road{
+    position:absolute;inset:0;
+    background:url("image/road_pov.jpg") center 45%/cover no-repeat;
+    transform-origin:50% 45%;will-change:transform;
   }
-  .roadside .wall.l{left:0;transform-origin:left center;transform:rotateY(72deg);}
-  .roadside .wall.r{right:0;transform-origin:right center;transform:rotateY(-72deg);}
+  /* 화면 가장자리로 갈수록 살짝 어둡게(속도감) */
   .roadside::after{
-    /* 본문 쪽(먼 곳)으로 갈수록 살짝 안개 */
     content:"";position:absolute;inset:0;
-    background:radial-gradient(ellipse 40% 60% at 50% 45%, rgba(244,233,218,.7), transparent 70%);
+    background:radial-gradient(ellipse 75% 85% at 50% 45%, transparent 55%, rgba(40,15,8,.35) 100%);
   }
   .page{position:relative;z-index:1;max-width:900px;margin:0 auto;background:var(--paper);}
   @media(min-width:1100px){
-    body{background:#6E645B;}
-    .page{box-shadow:0 0 60px rgba(40,15,8,.35);}
+    .page{box-shadow:0 0 70px rgba(40,15,8,.45);}
   }
   @media(max-width:1099px){ .roadside{display:none;} }
 
@@ -358,8 +352,7 @@
 
 <!-- 양옆 단풍 가로수길 (넓은 화면에서만) -->
 <div class="roadside" aria-hidden="true">
-  <div class="wall l"></div>
-  <div class="wall r"></div>
+  <div class="road"></div>
 </div>
 
 <div class="page">
@@ -811,20 +804,27 @@
 
   buildPrompt();
 
-  // 가로수길: 스크롤한 만큼 나무가 앞(바깥쪽)으로 다가옴
-  var walls = document.querySelectorAll('.roadside .wall');
-  if(walls.length === 2){
-    var ticking = false;
+  // 가로수길: 스크롤 진행만큼 길 끝(소실점)으로 다가가듯 확대
+  var road = document.querySelector('.roadside .road');
+  if(road){
+    var ZOOM = 0.35; // 맨 아래까지 내렸을 때 1.35배 — 천천히 다가가는 정도
+    var cur = 1, running = false;
+    function target(){
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      return 1 + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) * ZOOM;
+    }
+    // 스크롤을 바로 따라가지 않고 부드럽게 감속하며 따라감
     function drive(){
-      var d = window.scrollY * 1.6;
-      walls[0].style.backgroundPositionX = (-d) + 'px';
-      walls[1].style.backgroundPositionX = d + 'px';
-      ticking = false;
+      var goal = target();
+      cur += (goal - cur) * 0.06;
+      if(Math.abs(goal - cur) < 0.0005){ cur = goal; running = false; }
+      road.style.transform = 'scale(' + cur.toFixed(4) + ')';
+      if(running) requestAnimationFrame(drive);
     }
     window.addEventListener('scroll', function(){
-      if(!ticking){ ticking = true; requestAnimationFrame(drive); }
+      if(!running){ running = true; requestAnimationFrame(drive); }
     }, { passive:true });
-    drive();
+    cur = target(); road.style.transform = 'scale(' + cur + ')';
   }
 })();
 </script>
