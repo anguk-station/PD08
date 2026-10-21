@@ -840,23 +840,46 @@
     });
   });
 
+  // 전체 복사: ① Clipboard API → ② 임시 textarea + execCommand(iframe·구형 브라우저·아이폰 대비)
+  // → ③ 둘 다 막히면 프롬프트를 선택해 두고 Ctrl+C 안내
+  function legacyCopy(text){
+    var active = document.activeElement;
+    var tmp = document.createElement('textarea');
+    tmp.value = text;
+    tmp.setAttribute('readonly', '');   // 모바일에서 키보드가 뜨지 않게
+    tmp.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;font-size:16px;';
+    document.body.appendChild(tmp);
+    // 복사 대상은 '포커스된' 입력칸의 선택 영역이라 반드시 focus 후 선택 (아이폰은 setSelectionRange 필요)
+    tmp.focus({ preventScroll:true });
+    tmp.select();
+    tmp.setSelectionRange(0, text.length);
+    var ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(tmp);
+    if(active && active.focus) active.focus({ preventScroll:true });
+    return ok;
+  }
+
+  var copyTimer = null;
   $('btn-copy').addEventListener('click', function(){
-    var ta = $('result-text');
-    var btn = this;
-    function done(){
-      btn.textContent = '복사 완료!';
-      btn.classList.add('done');
-      setTimeout(function(){btn.textContent='전체 복사';btn.classList.remove('done');},1800);
+    var btn = this, ta = $('result-text');
+    buildPrompt();                      // 방금 입력한 내용까지 반영된 최신 프롬프트로
+    var text = ta.value;
+    function show(label, ok){
+      clearTimeout(copyTimer);
+      btn.textContent = label;
+      btn.classList.toggle('done', ok);
+      copyTimer = setTimeout(function(){ btn.textContent = '전체 복사'; btn.classList.remove('done'); }, ok ? 1800 : 4000);
     }
-    ta.select();
-    ta.setSelectionRange(0, ta.value.length);
-    function fallbackCopy(){
-      try{ if(document.execCommand('copy')){ done(); } }catch(e){}
+    function fallback(){
+      if(legacyCopy(text)){ show('복사 완료!', true); return; }
+      ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+      show('Ctrl+C 로 복사하세요', false);
     }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(ta.value).then(done).catch(fallbackCopy);
+    if(navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){ show('복사 완료!', true); }, fallback);
     } else {
-      fallbackCopy();
+      fallback();
     }
   });
 
