@@ -233,6 +233,21 @@
     .nearby .row .tag{padding-bottom:2px;}
   }
 
+  /* 스타일에 맞춰 정해진 가이드 캐릭터 */
+  .guide-pick{
+    display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:14px;
+    padding:10px 14px;border-radius:10px;background:rgba(224,160,64,.10);
+    font-size:14px;line-height:1.5;
+  }
+  .guide-pick .gp-label{font-weight:800;color:var(--maple-deep);white-space:nowrap;}
+  .guide-pick .gp-name{flex:1;min-width:180px;color:var(--ink);}
+  .guide-pick .gp-roll{
+    font-family:'Pretendard',sans-serif;font-size:12.5px;font-weight:700;
+    background:#fff;border:1.5px solid var(--card-line);border-radius:999px;
+    padding:5px 12px;cursor:pointer;color:var(--ink);white-space:nowrap;transition:all .15s ease;
+  }
+  .guide-pick .gp-roll:hover{border-color:var(--maple);color:var(--maple);}
+
   /* 알약형 선택 버튼 */
   .pills{display:flex;flex-wrap:wrap;gap:8px;}
   .pill{
@@ -444,18 +459,23 @@
           <div class="field">
             <label>디자인 스타일</label>
             <div class="pills" id="style-pills">
-              <button type="button" class="pill selected" data-val="">✨ AI 추천</button>
-              <button type="button" class="pill" data-val="따뜻한 필름 그레인 질감의 감성 가을 사진 무드, 부드러운 역광과 차분한 세리프 타이포그래피">🍂 감성 필름 포토</button>
-              <button type="button" class="pill" data-val="1960년대 빈티지 여행 포스터 스타일, 평면적인 색면과 굵은 레터링, 살짝 바랜 종이 질감">🗺️ 빈티지 여행 포스터</button>
-              <button type="button" class="pill" data-val="트렌디한 여행 매거진 스타일, 시원하게 큰 풍경 사진과 대담한 헤드라인, 사진 캡션과 정보 박스가 어우러진 에디토리얼 레이아웃">📰 여행 매거진</button>
-              <button type="button" class="pill" data-val="부드러운 수채화 번짐으로 그린 단풍 풍경 일러스트, 따뜻하고 서정적인 분위기">🎨 수채화 일러스트</button>
-              <button type="button" class="pill" data-val="여행 다이어리에 손으로 그리고 쓴 듯한 핸드드로잉 스타일, 스티커와 마스킹테이프, 메모 느낌">✏️ 손그림 다이어리</button>
-              <button type="button" class="pill" data-val="한옥·단청·전통 문양에서 영감을 받은 한국 전통 감성 디자인, 먹과 한지 질감, 단정한 명조체">🏯 한국 전통 감성</button>
-              <button type="button" class="pill" data-val="찢어 붙인 종이와 사진, 손글씨, 스티커가 어우러진 스크랩북 콜라주 스타일, 아날로그 핸드메이드 무드">✂️ 스크랩북 콜라주</button>
-              <button type="button" class="pill" data-val="__custom__">✏️ 직접 입력</button>
+              <button type="button" class="pill selected" data-g="ai" data-val="">✨ AI 추천</button>
+              <button type="button" class="pill" data-g="film" data-val="따뜻한 필름 그레인 질감의 감성 가을 사진 무드, 부드러운 역광과 차분한 세리프 타이포그래피">🍂 감성 필름 포토</button>
+              <button type="button" class="pill" data-g="vintage" data-val="1960년대 빈티지 여행 포스터 스타일, 평면적인 색면과 굵은 레터링, 살짝 바랜 종이 질감">🗺️ 빈티지 여행 포스터</button>
+              <button type="button" class="pill" data-g="magazine" data-val="트렌디한 여행 매거진 스타일, 시원하게 큰 풍경 사진과 대담한 헤드라인, 사진 캡션과 정보 박스가 어우러진 에디토리얼 레이아웃">📰 여행 매거진</button>
+              <button type="button" class="pill" data-g="water" data-val="부드러운 수채화 번짐으로 그린 단풍 풍경 일러스트, 따뜻하고 서정적인 분위기">🎨 수채화 일러스트</button>
+              <button type="button" class="pill" data-g="diary" data-val="여행 다이어리에 손으로 그리고 쓴 듯한 핸드드로잉 스타일, 스티커와 마스킹테이프, 메모 느낌">✏️ 손그림 다이어리</button>
+              <button type="button" class="pill" data-g="korean" data-val="한옥·단청·전통 문양에서 영감을 받은 한국 전통 감성 디자인, 먹과 한지 질감, 단정한 명조체">🏯 한국 전통 감성</button>
+              <button type="button" class="pill" data-g="scrap" data-val="찢어 붙인 종이와 사진, 손글씨, 스티커가 어우러진 스크랩북 콜라주 스타일, 아날로그 핸드메이드 무드">✂️ 스크랩북 콜라주</button>
+              <button type="button" class="pill" data-g="ai" data-val="__custom__">✏️ 직접 입력</button>
             </div>
             <input id="f-style-custom" type="text" placeholder="원하는 스타일을 자유롭게 적어주세요" style="display:none;margin-top:12px;" />
             <input id="f-style" type="hidden" value="" />
+            <div class="guide-pick">
+              <span class="gp-label">🧭 이번 가이드</span>
+              <span class="gp-name" id="guide-name"></span>
+              <button type="button" class="gp-roll" id="btn-guide-roll" title="같은 스타일 안에서 다른 가이드로 바꾸기">🎲 다른 가이드</button>
+            </div>
           </div>
         </div>
       </div>
@@ -559,34 +579,53 @@
 - 위에 적힌 네이버 지도 링크는 정확한 위치를 확인하는 조사용입니다. 카드 이미지에는 링크 주소, "지도에서 보기" 같은 버튼, QR코드, 지도 앱 아이콘을 넣지 마세요. 위치는 주소 텍스트로만 표기하세요.
 
 ━━━━━━━━━━━━━━━━━━
-[카드 구성 — 추천 이유가 가장 중요합니다]
+[가이드 캐릭터]
 ━━━━━━━━━━━━━━━━━━
 컨셉은 '여행 가이드가 직접 건네주는 단풍 명소 추천 가이드'입니다.
-- 카드 한쪽에 친근한 여행 가이드 캐릭터를 넣으세요. 가이드 깃발, 모자, 명찰, 배지처럼 한눈에 가이드임을 알 수 있는 소품을 들고 있어야 합니다.
-- 추천 이유는 가이드가 손님에게 건네는 말처럼 말풍선 또는 메모 카드 안에, 카드에서 가장 큰 글자로, 시선이 가장 먼저 닿는 자리에 배치하세요.
+- 이번 카드의 가이드는 '{GUIDE}'입니다. 이 설정을 그대로 따르고, 선택한 디자인 스타일의 그림체·질감으로 표현하세요.
+- 가이드 깃발, 모자, 명찰, 배지처럼 한눈에 가이드임을 알 수 있는 소품을 들고 있어야 합니다.
+
+━━━━━━━━━━━━━━━━━━
+[카드 구성 — 위에서부터 3단]
+━━━━━━━━━━━━━━━━━━
+이 카드는 갤러리에 올라가면 세로 가운데 부분(위에서 약 30%~70%)만 가로로 넓게 잘려 썸네일로 보입니다.
+그래서 썸네일에 꼭 보여야 할 '가이드 · 장소명 · 시그니처 포토존'은 가운데에, 추천 이유는 맨 위에 둡니다. 아래 3단 구성을 반드시 지켜주세요.
+
+① 상단 (위에서 0~28%) — 추천 이유
+- 추천 이유를 가이드가 손님에게 건네는 말풍선(또는 메모 카드) 안에, 카드 전체에서 가장 큰 글자로 넣으세요. 시선이 가장 먼저 닿는 자리입니다.
 - 추천 이유만 다정한 손글씨 느낌으로 표현하세요. 손글씨 연출은 추천 이유에만 한정하고, 나머지 텍스트는 선택한 디자인 스타일에 어울리는 서체로 또렷하게 구성하세요.
-- 장소명보다 추천 이유가 먼저 읽혀도 괜찮습니다. 그게 이 카드의 의도입니다.
+- 말풍선 꼬리는 아래 가운데 구역에 있는 가이드를 향하게 해서, 가이드가 하는 말로 이어지게 하세요.
+- 'PLAYDAY · 단풍 명소 가이드' 스탬프는 상단 모서리에 작게 두세요.
+
+② 가운데 (위에서 28~72%) — 썸네일 구역: 가이드 + 장소명 + 시그니처 포토존
+- 시그니처 포토존 메인 비주얼을 이 구역 가득, 가로로 넓게 배치하세요.
+- 가이드는 얼굴과 상반신이 이 구역 안에 온전히 들어오게, 포토존 풍경을 손이나 깃발로 가리키는 자세로 그리세요. 얼굴이 구역 경계에 걸려 잘리면 안 됩니다.
+- 장소명은 이 구역 안, 메인 비주얼 위에 큰 제목으로 얹으세요. 지역(시·군)과 부제 한 문장은 장소명 바로 아래에, 장소명보다 작지만 썸네일에서도 읽히는 크기로.
+- 'SIGNATURE PHOTO ZONE' 배지와 📍 포토존 이름도 이 구역 안에 두세요.
+- 썸네일로 작게 줄어도 읽히도록 이 구역에는 큰 글자만 두고, 작은 설명 글은 넣지 마세요.
+
+③ 하단 (위에서 72~100%) — 여행 정보
+- 맨 위에 포토존 위치와 촬영 팁 한 줄을 두고, 그 아래에 나머지 정보를 박스형으로 깔끔하게 정리하세요.
 
 ━━━━━━━━━━━━━━━━━━
 [시그니처 포토존 — 카드의 메인 비주얼]
 ━━━━━━━━━━━━━━━━━━
 이 가이드북만의 시그니처는 '이 장소에 가면 꼭 찍어야 할 한 장'입니다.
-- 카드에서 가장 크게 쓰이는 메인 비주얼은 시그니처 포토존에서 바라본 실제 풍경으로 만드세요. 그 지점의 실제 지형, 다리·정자·길 같은 구조물, 단풍나무의 배치를 최대한 그대로 재현하고, 다른 장소의 풍경을 섞지 마세요.
+- 메인 비주얼은 시그니처 포토존에서 바라본 실제 풍경으로 만드세요. 그 지점의 실제 지형, 다리·정자·길 같은 구조물, 단풍나무의 배치를 최대한 그대로 재현하고, 다른 장소의 풍경을 섞지 마세요.
 - 메인 비주얼 위에 카메라 뷰파인더 프레임(네 모서리 꺾쇠)이나 폴라로이드 프레임을 씌워 '여기서 찍으세요'라는 느낌을 주세요.
-- 'SIGNATURE PHOTO ZONE' 배지나 📍 핀과 함께 포토존 이름을 붙이세요.
-- 바로 옆에 촬영 팁 한 줄 — 베스트 시간대 · 서는 위치 · 구도 (예: "오전 9시 역광 · 다리 왼쪽 끝에서 · 연못에 비친 단풍까지 담기")
-- 메인 비주얼과 추천 이유 말풍선은 서로 가깝게 배치해, 가이드가 그 풍경을 가리키며 추천하는 장면처럼 보이게 하세요.
+- 촬영 팁 — 베스트 시간대 · 서는 위치 · 구도 (예: "오전 9시 역광 · 다리 왼쪽 끝에서 · 연못에 비친 단풍까지 담기")
 
 포함할 요소:
-- 장소명과 지역(시·군), 장소의 특징을 담은 부제 한 문장
-- 가이드의 추천 한마디 — 위에 적힌 추천 이유 그대로
-- 시그니처 포토존 — 메인 비주얼, 포토존 이름, 위치, 촬영 팁
+- [상단] 가이드의 추천 한마디 — 위에 적힌 추천 이유 그대로
+- [가운데] 장소명과 지역(시·군), 장소의 특징을 담은 부제 한 문장
+- [가운데] 가이드 캐릭터, 시그니처 포토존 메인 비주얼과 포토존 이름
+- [하단] 포토존 위치와 촬영 팁
 - 단풍 절정 시기 (예년 기준)
 - 추천 코스 1~2개와 소요 시간
 - 가는 방법(대중교통·주차)과 입장료·운영시간 — 확인된 경우에만
 ⟦N⟧- 함께 둘러보세요 — 위에 적힌 곳 각각 한 줄 소개와 거리
 - 가이드의 꿀팁 1~2가지 (혼잡 시간대, 준비물, 날씨 등)
-- 'PLAYDAY · 단풍 명소 가이드' — 여행 스탬프나 배지처럼 카드 한쪽 구석에
+- 'PLAYDAY · 단풍 명소 가이드' — 여행 스탬프나 배지처럼 상단 모서리에
 
 ━━━━━━━━━━━━━━━━━━
 [디자인]
@@ -596,7 +635,7 @@
 - 장소의 실제 풍경(단풍, 지형, 랜드마크)을 상징하는 비주얼을 사용하세요. 다른 지역의 랜드마크를 넣지 마세요.
 - 정보 위계를 분명하게 — 추천 이유와 시그니처 포토존 비주얼이 두 주인공이고, 그다음 장소명 > 본문 순서로 크기를 구분하세요.
 - 한글은 또렷하게, 너무 작은 글자는 금지합니다.
-- 내용과 관계없는 인물이나 사물은 넣지 마세요.
+- 가이드 외에 내용과 관계없는 인물이나 사물은 넣지 마세요.
 - 이 카드는 인쇄물처럼 보는 한 장짜리 이미지입니다. 웹페이지처럼 누르는 버튼, 링크, URL, 외부 서비스 로고는 넣지 마세요.`;
 
   function $(id){return document.getElementById(id);}
@@ -777,6 +816,70 @@
     return lines;
   }
 
+  // ───────── 가이드 캐릭터: 디자인 스타일마다 어울리는 후보 중 하나를 무작위로 ─────────
+  // (매번 같은 젊은 여성 가이드만 나오지 않도록 성별·나이·동물을 섞음)
+  var GUIDES = {
+    ai: [
+      '등산복에 배낭을 멘 듬직한 30대 남성 산악 가이드',
+      '단풍색 스카프를 두른 밝은 표정의 20대 여성 여행 가이드',
+      '빨간 등산 조끼를 입은 귀여운 다람쥐 가이드',
+      '은빛 머리에 등산 지팡이를 든 인자한 60대 할아버지 가이드',
+      '작은 배낭을 멘 동글동글한 아기 곰 가이드',
+      '숲해설가 조끼를 입고 쌍안경을 목에 건 50대 여성 가이드'
+    ],
+    film: [
+      '니트에 백팩을 멘 30대 남성 산악 가이드',
+      '트렌치코트에 베레모를 쓴 20대 여성 여행 가이드',
+      '필름 카메라를 목에 건 20대 남성 사진작가 가이드',
+      '숲해설가 조끼에 챙 모자를 쓴 50대 여성 가이드'
+    ],
+    vintage: [
+      '니커보커 등산바지에 콧수염을 기른 1960년대 레트로 아저씨 가이드',
+      '빨간 베레모와 제복을 입은 레트로 관광버스 안내원 가이드',
+      '등산모를 쓴 레트로 마스코트풍 여우 가이드'
+    ],
+    magazine: [
+      '아웃도어 재킷을 입은 30대 남성 트래블 크리에이터',
+      '선글라스를 머리에 얹은 20대 여성 여행 에디터',
+      '국립공원 레인저 제복을 입은 40대 남성 가이드'
+    ],
+    water: [
+      '단풍색 목도리를 두른 너구리 가이드',
+      '도토리 가방을 멘 다람쥐 가이드',
+      '단풍잎 우산을 든 고양이 가이드',
+      '작은 등산모를 쓴 아기 여우 가이드'
+    ],
+    diary: [
+      '낙서처럼 그린 동글동글한 아기 곰 가이드',
+      '동그란 안경을 쓴 부엉이 가이드',
+      '노란 모자를 쓴 남자아이 낙서 캐릭터 가이드',
+      '단발머리 여자아이 낙서 캐릭터 가이드'
+    ],
+    korean: [
+      '갓을 쓰고 도포를 입은 선비 가이드',
+      '단청색 저고리의 한복을 입은 여성 가이드',
+      '민화풍의 익살스러운 호랑이 가이드',
+      '민화풍 까치 가이드'
+    ],
+    scrap: [
+      '사진을 오려 붙인 듯한 등산복 차림의 남성 가이드',
+      '스티커처럼 오려 붙인 시바견 가이드',
+      '폴라로이드 사진 속에서 손을 흔드는 여성 가이드'
+    ]
+  };
+  var guideKey = 'ai', guideNow = {};
+  function pickGuide(key, reroll){
+    var pool = GUIDES[key] || GUIDES.ai, cur = guideNow[key], next = cur;
+    if(!cur || reroll){
+      // 다시 뽑을 때는 직전 가이드와 다른 것으로
+      do { next = pool[Math.floor(Math.random() * pool.length)]; } while(pool.length > 1 && next === cur);
+      guideNow[key] = next;
+    }
+    guideKey = key;
+    $('guide-name').textContent = guideNow[key];
+  }
+  pickGuide('ai');
+
   function buildPrompt(){
     var place = $('f-place').value.trim();
     var address = picked.place ? picked.place.address : '';
@@ -793,6 +896,7 @@
       .split('{MAPLINK}').join(mapLink)
       .split('{REASON}').join(reason || '(추천 이유를 입력하세요)')
       .split('{NEARBY}').join(nearby.join('\n'))
+      .split('{GUIDE}').join(guideNow[guideKey])
       .split('{STYLE}').join(style || '장소의 풍경과 분위기에 가장 어울리는 스타일을 직접 제안해서 적용');
 
     // ⟦N⟧ 표시 줄은 함께 둘러볼 곳을 하나라도 적었을 때만 남기고, 작업 순서 번호는 남은 줄 기준으로 다시 매김
@@ -841,8 +945,14 @@
       $('f-style').value = val;
       $('f-style-custom').style.display = (val === '__custom__') ? 'block' : 'none';
       if(val === '__custom__'){ $('f-style-custom').focus(); }
+      pickGuide(this.getAttribute('data-g'));
       buildPrompt();
     });
+  });
+
+  $('btn-guide-roll').addEventListener('click', function(){
+    pickGuide(guideKey, true);
+    buildPrompt();
   });
 
   // 전체 복사: ① Clipboard API → ② 임시 textarea + execCommand(iframe·구형 브라우저·아이폰 대비)
